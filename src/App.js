@@ -1,20 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import './App.css';
 import { Button, Container, Header, Message, Icon } from 'semantic-ui-react';
-import Navigation from './Navigation/Navigation';
-
 import Simu from '@viroulep/group-simulator';
+
+import './App.css';
+import Navigation from './Navigation/Navigation';
+import Settings from './Settings/Settings';
+
 
 const LoadingMessage = () => (
   <>
     <Message.Header>Loading required content</Message.Header>
     Please wait while the page is loading a required module.
-  </>
-);
-
-const LoadedMessage = () => (
-  <>
-    Module loaded, enjoy the application :)
   </>
 );
 
@@ -43,35 +39,28 @@ const FailureMessage = () => (
 // Use dismissable with wasm: info loading, green loaded, red timeout!
 const LoadingWasm = ({
   simulator,
-  loading
-}) => {
-  const [visible, setVisible] = useState(true);
-
-  return (
-    <>
-      {visible && (
-        <Message
-          icon
-          onDismiss={() => setVisible(false)}
-          color={simulator ? 'pink' : (loading ? 'teal' : 'red')}
-        >
-          {loading && (
-            <Icon name='circle notched' loading />
+  loading,
+}) => (
+  <>
+    {!simulator && (
+      <Message
+        icon
+        color={loading ? 'teal' : 'red'}
+      >
+        {loading && (
+          <Icon name='circle notched' loading />
+        )}
+        <Message.Content>
+          {loading ? (
+            <LoadingMessage />
+          ) : (
+            <FailureMessage />
           )}
-          <Message.Content>
-            {simulator ? (
-              <LoadedMessage />
-            ) : (loading ? (
-              <LoadingMessage />
-            ) : (
-              <FailureMessage />
-            ))}
-          </Message.Content>
-        </Message>
-      )}
-    </>
-  );
-};
+        </Message.Content>
+      </Message>
+    )}
+  </>
+);
 
 function App() {
   const [simulator, setSimulator] = useState(undefined);
@@ -98,7 +87,7 @@ function App() {
     console.log(simulator.getSetupProps());
     const { Err, Value } = simulator.simuGroup("333", times, simulator.DEFAULT_MODEL);
     console.log(simulator);
-    if (Err != simulator.ErrorKind.SUCCESS) {
+    if (Err !== simulator.ErrorKind.SUCCESS) {
       console.log(simulator.errorMessage(Err));
     } else {
       console.log("Result of the simulation:");
@@ -118,6 +107,7 @@ function App() {
             Coucou
           </Header>
           <Button primary onClick={doSomething} content="Test the thingy" />
+          <Settings simulator={simulator} />
         </>
       )}
     </Container>

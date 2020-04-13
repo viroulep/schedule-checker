@@ -15,9 +15,7 @@ import 'fomantic-ui-css/semantic.css';
 //</Button>
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <App />,
   document.getElementById('root')
 );
 

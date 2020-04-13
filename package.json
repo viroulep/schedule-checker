@@ -10,6 +10,8 @@
     "@testing-library/user-event": "^7.1.2",
     "@viroulep/group-simulator": "^1.0.0-beta.1",
     "fomantic-ui-css": "^2.8.4",
+    "lodash": "^4.17.15",
+    "node-sass": "^4.13.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1",
