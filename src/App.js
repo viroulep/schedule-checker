@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Container, Header, Message, Icon } from 'semantic-ui-react';
-import Simu from '@viroulep/group-simulator';
+import { Button, Container, Message, Icon } from 'semantic-ui-react';
+import { getSimu } from '@viroulep/group-simulator';
 
 import './App.css';
 import Navigation from './Navigation/Navigation';
@@ -67,7 +67,7 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   const loadWasm = async () => {
-    const wasm = Simu(() => { setSimulator(wasm); setLoading(false) });
+    const wasm = getSimu(() => { setSimulator(wasm); setLoading(false) });
   };
 
   // Pass '[]' as a dependency, so that it's ran just once.
@@ -77,7 +77,7 @@ function App() {
     setTimeout(() => setLoading(false), 3000);
   }, []);
 
-  const doSomething = () => {
+  /*const doSomething = () => {
     const times = new simulator.VectorTime();
     console.log(times);
     for (let i = 0; i < 12; i++) {
@@ -95,7 +95,7 @@ function App() {
       const seconds = Value - minutes * 60;
       console.log(`It lasted ${minutes} minutes and ${seconds} seconds.`);
     }
-  }
+  }*/
 
   return (
     <Container>
@@ -103,10 +103,6 @@ function App() {
       {simulator && (
         <>
           <Navigation />
-          <Header>
-            Coucou
-          </Header>
-          <Button primary onClick={doSomething} content="Test the thingy" />
           <Settings simulator={simulator} />
         </>
       )}

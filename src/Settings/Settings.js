@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Grid,
+  Header,
   Form,
   Button,
   Segment,
@@ -8,46 +9,15 @@ import {
   Menu,
 } from 'semantic-ui-react';
 import _ from 'lodash';
+import { asMap, asObject } from '@viroulep/group-simulator';
 
 import './Settings.scss';
 
-const asMap = (nativeMap) => {
-  console.log("asmap");
-  const obj = {};
-  const keys = nativeMap.keys();
-  for (let i = 0; i < keys.size(); i++) {
-    const k = keys.get(i);
-    obj[k] = nativeMap.get(k);
-  }
-  return obj;
-};
-
-const asNativeMap = (simulator, obj) => {
-  const native = new simulator.MapStringInt();
-  Object.entries(obj).map(([k, v]) => native.set(k, v));
-  return native;
-};
-
-const SetupSettings = ({
+const SettingsPanel = ({
   simulator,
+  props,
+  setProps,
 }) => {
-  const [savedProps, setSavedProps] = useState({});
-  const [props, setProps] = useState({});
-
-  useEffect(() => {
-    const theMap = asMap(simulator.getSetupProps());
-    setProps(theMap);
-    setSavedProps(theMap);
-  }, [simulator]);
-
-  const saveSettings = () => {
-    setSavedProps(props);
-    // TODO: check return code
-    simulator.loadConfig(
-      asNativeMap(simulator, props),
-      simulator.getModelProps(),
-      simulator.getScramblingProps());
-  };
 
   const updateInProps = (k, v) => {
     const newProps = {
@@ -58,14 +28,6 @@ const SetupSettings = ({
     setProps(newProps);
   };
 
-  const test = () => {
-    console.log(simulator.getSetupProps().get("cutoff"));
-  };
-
-  console.log(props);
-
-  const hasChanged = !_.isEqual(savedProps, props);
-
   return (
     <Form className='settings-form'>
       <Grid doubling textAlign='right' columns={3}>
@@ -74,6 +36,7 @@ const SetupSettings = ({
             <Grid.Column key={k}>
               <Form.Input
                 inline
+                min={0}
                 type='number'
                 label={k}
                 value={v}
@@ -83,13 +46,6 @@ const SetupSettings = ({
           );
         })}
       </Grid>
-      <Button
-        primary
-        content='Save settings'
-        onClick={saveSettings}
-        disabled={!hasChanged}
-      />
-      <Button color='pink' content='test' onClick={test} />
     </Form>
   );
 };
@@ -97,36 +53,93 @@ const SetupSettings = ({
 const Settings = ({
   simulator,
 }) => {
-  const [active, setActive] = useState('bio');
-  const handleClick = (e, { name }) => setActive(name);
+  const [active, setActive] = useState('setup');
+  const setActiveTab = (e, { name }) => setActive(name);
+  const [setup, setSetup] = useState({});
+  const [model, setModel] = useState({});
+  const [scrambling, setScrambling] = useState({});
+  const [saved, setSaved] = useState({});
+
+  useEffect(() => {
+    const mapSetup = asObject(simulator.getSetupProps());
+    const mapModel = asObject(simulator.getModelProps());
+    const mapScrambling = asObject(simulator.getScramblingProps());
+    setSetup(mapSetup);
+    setModel(mapModel);
+    setScrambling(mapScrambling);
+    setSaved({
+      setup: mapSetup,
+      model: mapModel,
+      scrambling: mapScrambling,
+    });
+  }, [simulator]);
+
+  const loadConfig = () => {
+    simulator.loadConfig(
+      asMap(simulator.MapStringInt, setup),
+      asMap(simulator.MapStringInt, model),
+      asMap(simulator.MapStringInt, scrambling));
+    setSaved({ setup, model, scrambling });
+  }
+
+  const seHasChanges = !_.isEqual(saved.setup, setup);
+  const mHasChanges = !_.isEqual(saved.model, model);
+  const scHasChanges = !_.isEqual(saved.scrambling, scrambling);
+  const hasAnyChange = seHasChanges || mHasChanges || scHasChanges;
+
+  const saveButton = (
+    <Button
+      content="Save settings"
+      onClick={loadConfig}
+      disabled={!hasAnyChange}
+      positive
+    />
+  );
+
   return (
     <div>
-      <Segment attached='top'>
-        <Message color='teal' content='All times are expressed in seconds.' />
-        <SetupSettings simulator={simulator} />
-      </Segment>
-      <Menu attached='bottom' tabular>
+      <Header>
+        Simulator settings
+      </Header>
+      <Message color='violet'>
+        All values are unsigned integers.
+        <br/>
+        All times are expressed in seconds.
+      </Message>
+      <Menu attached='top' pointing color='violet'>
         <Menu.Item
-          name='bio'
-          active={active === 'bio'}
-          onClick={handleClick}
+          content={`Setup ${seHasChanges ? '*' : ''}`}
+          name='setup'
+          active={active === 'setup'}
+          onClick={setActiveTab}
         />
         <Menu.Item
-          name='pics'
-          active={active === 'pics'}
-          onClick={handleClick}
+          content={`Model parameters ${mHasChanges ? '*' : ''}`}
+          name='model'
+          active={active === 'model'}
+          onClick={setActiveTab}
         />
         <Menu.Item
-          name='companies'
-          active={active === 'companies'}
-          onClick={handleClick}
+          content={`Scrambling costs ${scHasChanges ? '*' : ''}`}
+          name='scrambling'
+          active={active === 'scrambling'}
+          onClick={setActiveTab}
         />
         <Menu.Item
-          name='links'
-          active={active === 'links'}
-          onClick={handleClick}
+          content={saveButton}
         />
       </Menu>
+      <Segment attached='bottom'>
+        {active === 'setup' && (
+          <SettingsPanel simulator={simulator} props={setup} setProps={setSetup} />
+        )}
+        {active === 'model' && (
+          <SettingsPanel simulator={simulator} props={model} setProps={setModel} />
+        )}
+        {active === 'scrambling' && (
+          <SettingsPanel simulator={simulator} props={scrambling} setProps={setScrambling} />
+        )}
+      </Segment>
     </div>
   )
 };

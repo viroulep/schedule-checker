@@ -1568,9 +1568,9 @@
     tsutils "^3.17.1"
 
 "@viroulep/group-simulator@^1.0.0-beta.1":
-  version "1.0.0-beta.2"
-  resolved "https://registry.yarnpkg.com/@viroulep/group-simulator/-/group-simulator-1.0.0-beta.2.tgz#c0a77796fd309a33e741c0dfea081f128d24bd93"
-  integrity sha512-hT1JO25SvSJzHr6mpBz+h3c4Ko9Z2MFj35y3ih2Oyp7RyMWeB+QB7x8WJrY+BpHgFVlskJiqr12uykSaWHW+wA==
+  version "1.0.0-beta.3"
+  resolved "https://registry.yarnpkg.com/@viroulep/group-simulator/-/group-simulator-1.0.0-beta.3.tgz#5b94bae3bb0d5169337cd77047d20c5995c0d272"
+  integrity sha512-0iSVOWR1SlAewfjVVX+1LDSk+rl4BLFORkfdq23qffGN32a514iXYQS9X9ekdr3zdyahyQVR0b81TKeJzxnbzg==
 
 "@webassemblyjs/ast@1.8.5":
   version "1.8.5"
