@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Router } from "@reach/router";
+import { Router } from '@reach/router';
 import {
   Grid,
   Header,
@@ -16,37 +16,33 @@ import ItemLink from '../Navigation/ItemLink';
 import './Settings.scss';
 
 const SettingsPanel = ({
-  simulator,
   props,
   setProps,
 }) => {
-
   const updateInProps = (k, v) => {
     const newProps = {
       ...props,
     };
     // NaN evaluates as false, so if NaN take 0
-    newProps[k] = parseInt(v) || 0;
+    newProps[k] = parseInt(v, 10) || 0;
     setProps(newProps);
   };
 
   return (
-    <Form className='settings-form'>
-      <Grid doubling textAlign='right' columns={3}>
-        {Object.entries(props).map(([k, v]) => {
-          return (
-            <Grid.Column key={k}>
-              <Form.Input
-                inline
-                min={0}
-                type='number'
-                label={k}
-                value={v}
-                onChange={(e) => updateInProps(k, e.target.value)}
-              />
-            </Grid.Column>
-          );
-        })}
+    <Form className="settings-form">
+      <Grid doubling textAlign="right" columns={3}>
+        {Object.entries(props).map(([k, v]) => (
+          <Grid.Column key={k}>
+            <Form.Input
+              inline
+              min={0}
+              type="number"
+              label={k}
+              value={v}
+              onChange={(e) => updateInProps(k, e.target.value)}
+            />
+          </Grid.Column>
+        ))}
       </Grid>
     </Form>
   );
@@ -78,7 +74,8 @@ const Settings = ({
     simulator.loadConfig(
       asMap(simulator.MapStringInt, setup),
       asMap(simulator.MapStringInt, model),
-      asMap(simulator.MapStringInt, scrambling));
+      asMap(simulator.MapStringInt, scrambling),
+    );
     setSaved({ setup, model, scrambling });
   }
 
@@ -101,43 +98,49 @@ const Settings = ({
       <Header>
         Simulator settings
       </Header>
-      <Message color='violet'>
+      <Message color="violet">
         All values are unsigned integers.
-        <br/>
+        <br />
         All times are expressed in seconds.
       </Message>
-      <Menu attached='top' pointing color='violet'>
-        <ItemLink exact to=''>
-          Setup {seHasChanges ? '*' : ''}
+      <Menu attached="top" pointing color="violet">
+        <ItemLink exact to="">
+          Setup
+          {' '}
+          {seHasChanges ? '*' : ''}
         </ItemLink>
-        <ItemLink to='model'>
-          Model parameters {mHasChanges ? '*' : ''}
+        <ItemLink to="model">
+          Model parameters
+          {' '}
+          {mHasChanges ? '*' : ''}
         </ItemLink>
-        <ItemLink to='scrambling'>
-          Scrambling costs {scHasChanges ? '*' : ''}
+        <ItemLink to="scrambling">
+          Scrambling costs
+          {' '}
+          {scHasChanges ? '*' : ''}
         </ItemLink>
         <Menu.Item
-          position='right'
+          position="right"
           content={saveButton}
         />
       </Menu>
-      <Segment attached='bottom'>
+      <Segment attached="bottom">
         <Router>
           <SettingsPanel
-            path='/'
+            path="/"
             default
             simulator={simulator}
             props={setup}
             setProps={setSetup}
           />
           <SettingsPanel
-            path='/model'
+            path="/model"
             simulator={simulator}
             props={model}
             setProps={setModel}
           />
           <SettingsPanel
-            path='/scrambling'
+            path="/scrambling"
             simulator={simulator}
             props={scrambling}
             setProps={setScrambling}

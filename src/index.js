@@ -6,17 +6,17 @@ import * as serviceWorker from './serviceWorker';
 import 'fomantic-ui-css/semantic.css';
 
 // NOTE:
-//import { Link } from 'react-router-dom'
-//import { Button } from 'semantic-ui-react'
+// import { Link } from 'react-router-dom'
+// import { Button } from 'semantic-ui-react'
 
-//// 💡 `to` prop is not handled in `Button` and will be passed to `Link` component
-//<Button as={Link} to="/home">
-  //To homepage
-//</Button>
+// // 💡 `to` prop is not handled in `Button` and will be passed to `Link` component
+// <Button as={Link} to="/home">
+// To homepage
+// </Button>
 
 ReactDOM.render(
   <App />,
-  document.getElementById('root')
+  document.getElementById('root'),
 );
 
 // If you want your app to work offline and load faster, you can change

@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Container, Message, Icon } from 'semantic-ui-react';
+import {
+  Button, Container, Message, Icon,
+} from 'semantic-ui-react';
 import { getSimu } from '@viroulep/group-simulator';
-import { Router } from "@reach/router";
+import { Router } from '@reach/router';
 
 import './App.css';
 import Navigation from './Navigation/Navigation';
 import Settings from './Settings/Settings';
 import Dummy from './Dummy/Dummy';
 
-//https://github.com/rafrex/spa-github-pages
+// https://github.com/rafrex/spa-github-pages
 
 const LoadingMessage = () => (
   <>
@@ -21,11 +23,12 @@ const FailureMessage = () => (
   <>
     <p>
       The loading of the module timed out.
-      It's likely that there was an error and that your browser does not support WebAssembly.
+      It&pos;s likely that there was an error and that your browser does not support WebAssembly.
     </p>
 
     <p>
-      This module is necessary for this application, it is pointless to show you anything more than this error message at this point.
+      This module is necessary for this application, it is pointless to show
+      you anything more than this error message at this point.
       <br />
       Feel free to check this website to make sure your browser is supported.
     </p>
@@ -51,7 +54,7 @@ const LoadingWasm = ({
         color={loading ? 'teal' : 'red'}
       >
         {loading && (
-          <Icon name='circle notched' loading />
+          <Icon name="circle notched" loading />
         )}
         <Message.Content>
           {loading ? (
@@ -65,9 +68,9 @@ const LoadingWasm = ({
   </>
 );
 
-const Home = () => <div>Hey it's home</div>;
+const Home = () => <div>Hey it&apos;s home</div>;
 
-const NotFound = () => <p>Oups, it's a 404</p>;
+const NotFound = () => <p>Oups, it&apos;s a 404</p>;
 
 function App() {
   const [simulator, setSimulator] = useState(undefined);
@@ -84,7 +87,7 @@ function App() {
     setTimeout(() => setLoading(false), 3000);
   }, []);
 
-  /*const doSomething = () => {
+  /* const doSomething = () => {
     const times = new simulator.VectorTime();
     console.log(times);
     for (let i = 0; i < 12; i++) {
@@ -102,7 +105,7 @@ function App() {
       const seconds = Value - minutes * 60;
       console.log(`It lasted ${minutes} minutes and ${seconds} seconds.`);
     }
-  }*/
+  } */
 
   return (
     <Container>
@@ -111,9 +114,9 @@ function App() {
         <>
           <Navigation />
           <Router>
-            <Home path='/' />
-            <Settings simulator={simulator} path='settings/*' />
-            <Dummy path='/dummy' />
+            <Home path="/" />
+            <Settings simulator={simulator} path="settings/*" />
+            <Dummy path="/dummy" />
             <NotFound default />
           </Router>
         </>
