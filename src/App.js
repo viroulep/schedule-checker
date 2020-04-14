@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Container, Message, Icon } from 'semantic-ui-react';
 import { getSimu } from '@viroulep/group-simulator';
+import { Router } from "@reach/router";
 
 import './App.css';
 import Navigation from './Navigation/Navigation';
 import Settings from './Settings/Settings';
+import Dummy from './Dummy/Dummy';
 
+//https://github.com/rafrex/spa-github-pages
 
 const LoadingMessage = () => (
   <>
@@ -62,6 +65,10 @@ const LoadingWasm = ({
   </>
 );
 
+const Home = () => <div>Hey it's home</div>;
+
+const NotFound = () => <p>Oups, it's a 404</p>;
+
 function App() {
   const [simulator, setSimulator] = useState(undefined);
   const [loading, setLoading] = useState(true);
@@ -103,7 +110,12 @@ function App() {
       {simulator && (
         <>
           <Navigation />
-          <Settings simulator={simulator} />
+          <Router>
+            <Home path='/' />
+            <Settings simulator={simulator} path='settings/*' />
+            <Dummy path='/dummy' />
+            <NotFound default />
+          </Router>
         </>
       )}
     </Container>

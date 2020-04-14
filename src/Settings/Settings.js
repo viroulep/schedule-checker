@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Router } from "@reach/router";
 import {
   Grid,
   Header,
@@ -11,6 +12,7 @@ import {
 import _ from 'lodash';
 import { asMap, asObject } from '@viroulep/group-simulator';
 
+import ItemLink from '../Navigation/ItemLink';
 import './Settings.scss';
 
 const SettingsPanel = ({
@@ -53,8 +55,6 @@ const SettingsPanel = ({
 const Settings = ({
   simulator,
 }) => {
-  const [active, setActive] = useState('setup');
-  const setActiveTab = (e, { name }) => setActive(name);
   const [setup, setSetup] = useState({});
   const [model, setModel] = useState({});
   const [scrambling, setScrambling] = useState({});
@@ -107,38 +107,42 @@ const Settings = ({
         All times are expressed in seconds.
       </Message>
       <Menu attached='top' pointing color='violet'>
+        <ItemLink exact to=''>
+          Setup {seHasChanges ? '*' : ''}
+        </ItemLink>
+        <ItemLink to='model'>
+          Model parameters {mHasChanges ? '*' : ''}
+        </ItemLink>
+        <ItemLink to='scrambling'>
+          Scrambling costs {scHasChanges ? '*' : ''}
+        </ItemLink>
         <Menu.Item
-          content={`Setup ${seHasChanges ? '*' : ''}`}
-          name='setup'
-          active={active === 'setup'}
-          onClick={setActiveTab}
-        />
-        <Menu.Item
-          content={`Model parameters ${mHasChanges ? '*' : ''}`}
-          name='model'
-          active={active === 'model'}
-          onClick={setActiveTab}
-        />
-        <Menu.Item
-          content={`Scrambling costs ${scHasChanges ? '*' : ''}`}
-          name='scrambling'
-          active={active === 'scrambling'}
-          onClick={setActiveTab}
-        />
-        <Menu.Item
+          position='right'
           content={saveButton}
         />
       </Menu>
       <Segment attached='bottom'>
-        {active === 'setup' && (
-          <SettingsPanel simulator={simulator} props={setup} setProps={setSetup} />
-        )}
-        {active === 'model' && (
-          <SettingsPanel simulator={simulator} props={model} setProps={setModel} />
-        )}
-        {active === 'scrambling' && (
-          <SettingsPanel simulator={simulator} props={scrambling} setProps={setScrambling} />
-        )}
+        <Router>
+          <SettingsPanel
+            path='/'
+            default
+            simulator={simulator}
+            props={setup}
+            setProps={setSetup}
+          />
+          <SettingsPanel
+            path='/model'
+            simulator={simulator}
+            props={model}
+            setProps={setModel}
+          />
+          <SettingsPanel
+            path='/scrambling'
+            simulator={simulator}
+            props={scrambling}
+            setProps={setScrambling}
+          />
+        </Router>
       </Segment>
     </div>
   )
