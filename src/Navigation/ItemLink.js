@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link } from '@reach/router';
 import cn from 'classnames';
+import { Link } from '@reach/router';
 
 const itemProps = (active) => ({
   className: cn('item', { active }),
@@ -15,8 +15,15 @@ const isExactlyActive = ({
 }) => itemProps(isCurrent);
 
 /* eslint-disable react/jsx-props-no-spreading */
-const ItemLink = ({ exact, ...props }) => (
+const ItemLink = ({
+  prefixed,
+  exact,
+  to,
+  ...props
+}) => (
+  // 'prefixed' can be used for absolute navigation and make sure gh-pages work
   <Link
+    to={prefixed ? `${process.env.PUBLIC_URL}${to}` : to}
     {...props}
     getProps={exact ? isExactlyActive : isPartiallyActive}
   />
