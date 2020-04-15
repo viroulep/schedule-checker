@@ -6,8 +6,6 @@ const integerDivision = (x, y) => ({
   remainder: x % y,
 });
 
-// Hopefully there will be more :)
-/* eslint-disable import/prefer-default-export */
 export const timeToString = (time) => {
   let { result, remainder } = integerDivision(time, SECS_IN_HOUR);
   const hour = result;
@@ -17,3 +15,5 @@ export const timeToString = (time) => {
   const secStr = `${remainder} seconds`;
   return [hourStr, minStr, secStr].join(' ');
 };
+
+export const setInt = (e, set, def) => set(parseInt(e.target.value, 10) || def);

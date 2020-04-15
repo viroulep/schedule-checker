@@ -1,57 +1,14 @@
 import React, { useState } from 'react';
 import {
-  Button, Header, Segment,
+  Header,
 } from 'semantic-ui-react';
-import { asVector } from '@viroulep/group-simulator';
-import ModalGenRandom from '../GroupGeneration/ModalGenRandom';
-import EventPicker from '../Pickers/Event';
-import ModelPicker from '../Pickers/Model';
-import { timeToString } from '../utils';
-import { defaultModel, defaultEvent } from '../data/simu';
+import TimesDetail from './TimesDetail';
+import QuickOpt from './QuickOpt';
+import QuickSimu from './QuickSimu';
 import './QuickRun.scss';
 
 // Poor man's database
 let savedTimes = [];
-
-const TimesDetail = ({
-  times,
-  setTimes,
-}) => {
-  const [open, setOpen] = useState(false);
-  const OpenButton = ({ onClick }) => (
-    <Button
-      color="violet"
-      content="Set group times"
-      onClick={onClick}
-      compact
-    />
-  );
-
-  return (
-    <div className="times-details">
-      <ModalGenRandom
-        times={times}
-        setTimes={setTimes}
-        OpenButton={OpenButton}
-      />
-      <Button onClick={() => setOpen(!open)} compact>
-        {open ? (
-          <>Hide details.</>
-        ) : (
-          <>Show average times.</>
-        )}
-      </Button>
-      {open && (
-        <Segment>
-          <code>
-            {times.join(', ')}
-          </code>
-        </Segment>
-      )}
-    </div>
-  );
-};
-
 
 const QuickRunPage = ({
   simulator,
@@ -61,28 +18,11 @@ const QuickRunPage = ({
     savedTimes = array;
     setTimes(array);
   };
-  const [event, setEvent] = useState(defaultEvent);
-  const [model, setModel] = useState(defaultModel);
-  const [message, setMessage] = useState('');
-
-  const runSimulation = () => {
-    const timesVec = asVector(simulator.VectorTime, times);
-    // We'll just use the default config with no override!
-    const localOverride = new simulator.MapStringInt();
-    const { Err, Value } = simulator.simuGroup(event, timesVec, localOverride, model);
-    if (Err !== simulator.ErrorKind.SUCCESS) {
-      setMessage(
-        `An error occurred during the simulation: ${simulator.errorMessage(Err)}`,
-      );
-    } else {
-      setMessage(`The group took ${timeToString(Value)}.`);
-    }
-  };
 
   return (
     <>
       <Header>
-        Quick group simulation
+        Group setup
       </Header>
       <div>
         There are currently
@@ -92,26 +32,8 @@ const QuickRunPage = ({
         competitors in the group.
         <TimesDetail times={times} setTimes={setPersistedTimes} />
       </div>
-      <div>
-        I want to simulate this group for
-        {' '}
-        <EventPicker event={event} setEvent={setEvent} inline />
-        {' '}
-        and my staff will be using the
-        {' '}
-        <ModelPicker model={model} setModel={setModel} inline />
-        {' '}
-        system throughout the group.
-      </div>
-      <Button
-        primary
-        className="run-simu"
-        content="Run it!"
-        onClick={runSimulation}
-      />
-      <p>
-        {message}
-      </p>
+      <QuickSimu simulator={simulator} times={times} />
+      <QuickOpt simulator={simulator} times={times} />
     </>
   );
 };

@@ -3,6 +3,8 @@ import {
   Form, Button, Modal,
 } from 'semantic-ui-react';
 
+import { setInt } from '../utils';
+
 const generateRandomArray = (min, max, size) => Array.from(Array(size))
   .map(() => Math.floor(Math.random() * (max - min + 1)) + min);
 
@@ -16,7 +18,6 @@ const ModalGenRandom = ({
   const [min, setMin] = useState(10);
   const [max, setMax] = useState(15);
   const [amount, setAmount] = useState(20);
-  const setInt = (e, set, def) => set(parseInt(e.target.value, 10) || def);
 
   const setOpen = () => setOpenValue(true);
   const setClose = () => setOpenValue(false);

@@ -101,7 +101,7 @@ function App() {
       {simulator && (
         <>
           <Navigation />
-          <Router basepath={process.env.PUBLIC_URL} >
+          <Router basepath={process.env.PUBLIC_URL}>
             <Home path="/" />
             <Settings simulator={simulator} path="settings/*" />
             <QuickRunPage simulator={simulator} path="/quick-simu" />
