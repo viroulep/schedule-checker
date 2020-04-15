@@ -67,7 +67,9 @@ const QuickRunPage = ({
 
   const runSimulation = () => {
     const timesVec = asVector(simulator.VectorTime, times);
-    const { Err, Value } = simulator.simuGroup(event, timesVec, model);
+    // We'll just use the default config with no override!
+    const localOverride = new simulator.MapStringInt();
+    const { Err, Value } = simulator.simuGroup(event, timesVec, localOverride, model);
     if (Err !== simulator.ErrorKind.SUCCESS) {
       setMessage(
         `An error occurred during the simulation: ${simulator.errorMessage(Err)}`,
