@@ -6,7 +6,7 @@ const Navigation = () => (
   <Menu pointing secondary>
     <ItemLink exact to="/">Home</ItemLink>
     <ItemLink to="settings">Settings</ItemLink>
-    <ItemLink to="dummy">Dummy</ItemLink>
+    <ItemLink to="quick-simu">Quick simulation</ItemLink>
   </Menu>
 );
 

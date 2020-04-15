@@ -2,10 +2,12 @@ const SECS_IN_MINUTE = 60;
 const SECS_IN_HOUR = 60 * SECS_IN_MINUTE;
 
 const integerDivision = (x, y) => ({
-  result: Math.floor(x/y),
+  result: Math.floor(x / y),
   remainder: x % y,
 });
 
+// Hopefully there will be more :)
+/* eslint-disable import/prefer-default-export */
 export const timeToString = (time) => {
   let { result, remainder } = integerDivision(time, SECS_IN_HOUR);
   const hour = result;

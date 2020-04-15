@@ -54,9 +54,9 @@ const ModalGenRandom = ({
             {' '}
             competitors in the group currently:
             <br />
-            [
-            {generated.join(',')}
-            ]
+            <code>
+              {generated.join(', ')}
+            </code>
             <br />
             The form below let you add some randomly generated number within
             {' '}

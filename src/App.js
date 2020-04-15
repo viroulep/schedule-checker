@@ -8,7 +8,7 @@ import { Router } from '@reach/router';
 import './App.css';
 import Navigation from './Navigation/Navigation';
 import Settings from './Settings/Settings';
-import Dummy from './Dummy/Dummy';
+import QuickRunPage from './Simulation/QuickRun';
 
 // https://github.com/rafrex/spa-github-pages
 
@@ -68,7 +68,15 @@ const LoadingWasm = ({
   </>
 );
 
-const Home = () => <div>Hey it&apos;s home</div>;
+const Home = () => (
+  <div>
+    This page is a work in progress and most likely won&apos;t do what you expect.
+    <br />
+    You should not use it.
+    <br />
+    Come back later.
+  </div>
+);
 
 const NotFound = () => <p>Oups, it&apos;s a 404</p>;
 
@@ -87,26 +95,6 @@ function App() {
     setTimeout(() => setLoading(false), 3000);
   }, []);
 
-  /* const doSomething = () => {
-    const times = new simulator.VectorTime();
-    console.log(times);
-    for (let i = 0; i < 12; i++) {
-      // people do 12s average
-      times.push_back(12);
-    }
-    console.log(simulator.getSetupProps());
-    const { Err, Value } = simulator.simuGroup("333", times, simulator.DEFAULT_MODEL);
-    console.log(simulator);
-    if (Err !== simulator.ErrorKind.SUCCESS) {
-      console.log(simulator.errorMessage(Err));
-    } else {
-      console.log("Result of the simulation:");
-      const minutes = Math.floor(Value / 60);
-      const seconds = Value - minutes * 60;
-      console.log(`It lasted ${minutes} minutes and ${seconds} seconds.`);
-    }
-  } */
-
   return (
     <Container>
       <LoadingWasm simulator={simulator} loading={loading} />
@@ -116,7 +104,7 @@ function App() {
           <Router>
             <Home path="/" />
             <Settings simulator={simulator} path="settings/*" />
-            <Dummy path="/dummy" />
+            <QuickRunPage simulator={simulator} path="/quick-simu" />
             <NotFound default />
           </Router>
         </>

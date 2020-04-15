@@ -9,9 +9,18 @@ const eventsForSimu = events.forSimulation.map((e) => ({
   value: e.id,
 }));
 
+/* eslint-disable react/jsx-props-no-spreading */
 const EventPicker = ({
   event,
   setEvent,
-}) => <GenericPicker val={event} setVal={setEvent} options={eventsForSimu} />;
+  ...props
+}) => (
+  <GenericPicker
+    {...props}
+    val={event}
+    setVal={setEvent}
+    options={eventsForSimu}
+  />
+);
 
 export default EventPicker;

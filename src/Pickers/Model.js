@@ -9,9 +9,18 @@ const modelOptions = availableModels.map((m) => ({
   value: m,
 }));
 
+/* eslint-disable react/jsx-props-no-spreading */
 const ModelPicker = ({
   model,
   setModel,
-}) => <GenericPicker val={model} setVal={setModel} options={modelOptions} />;
+  ...props
+}) => (
+  <GenericPicker
+    {...props}
+    val={model}
+    setVal={setModel}
+    options={modelOptions}
+  />
+);
 
 export default ModelPicker;
