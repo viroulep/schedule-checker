@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Router } from '@reach/router';
+import { Link, Router } from '@reach/router';
 import {
   Grid,
   Header,
@@ -12,7 +12,9 @@ import {
 import _ from 'lodash';
 import { asMap, asObject } from '@viroulep/group-simulator';
 
-import ItemLink from '../Navigation/ItemLink';
+import {
+  isPartiallyActive, isExactlyActive,
+} from '../Navigation/utils';
 import './Settings.scss';
 
 const SettingsPanel = ({
@@ -104,21 +106,21 @@ const Settings = ({
         All times are expressed in seconds.
       </Message>
       <Menu attached="top" pointing color="violet">
-        <ItemLink exact to="">
+        <Link to="" getProps={isExactlyActive}>
           Setup
           {' '}
           {seHasChanges ? '*' : ''}
-        </ItemLink>
-        <ItemLink to="model">
+        </Link>
+        <Link to="model" getProps={isPartiallyActive}>
           Model parameters
           {' '}
           {mHasChanges ? '*' : ''}
-        </ItemLink>
-        <ItemLink to="scrambling">
+        </Link>
+        <Link to="scrambling" getProps={isPartiallyActive}>
           Scrambling costs
           {' '}
           {scHasChanges ? '*' : ''}
-        </ItemLink>
+        </Link>
         <Menu.Item
           position="right"
           content={saveButton}
