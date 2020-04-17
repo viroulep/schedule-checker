@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/schedule-checker/static/css/main.d370f975.chunk.css",
-    "main.js": "/schedule-checker/static/js/main.b5d46e06.chunk.js",
-    "main.js.map": "/schedule-checker/static/js/main.b5d46e06.chunk.js.map",
+    "main.js": "/schedule-checker/static/js/main.0cea35c0.chunk.js",
+    "main.js.map": "/schedule-checker/static/js/main.0cea35c0.chunk.js.map",
     "runtime-main.js": "/schedule-checker/static/js/runtime-main.6c3697af.js",
     "runtime-main.js.map": "/schedule-checker/static/js/runtime-main.6c3697af.js.map",
     "static/css/2.b91fe813.chunk.css": "/schedule-checker/static/css/2.b91fe813.chunk.css",
@@ -10,7 +10,7 @@
     "static/js/2.c16eeea1.chunk.js.map": "/schedule-checker/static/js/2.c16eeea1.chunk.js.map",
     "group-simulator.wasm": "/schedule-checker/group-simulator.9ca99041.wasm",
     "index.html": "/schedule-checker/index.html",
-    "precache-manifest.0c9d776a1fd59d484c6a17129c960ffd.js": "/schedule-checker/precache-manifest.0c9d776a1fd59d484c6a17129c960ffd.js",
+    "precache-manifest.b1d3895586b70e7d76aeeeb720f62c13.js": "/schedule-checker/precache-manifest.b1d3895586b70e7d76aeeeb720f62c13.js",
     "service-worker.js": "/schedule-checker/service-worker.js",
     "static/css/2.b91fe813.chunk.css.map": "/schedule-checker/static/css/2.b91fe813.chunk.css.map",
     "static/css/main.d370f975.chunk.css.map": "/schedule-checker/static/css/main.d370f975.chunk.css.map",
@@ -22,6 +22,6 @@
     "static/css/2.b91fe813.chunk.css",
     "static/js/2.c16eeea1.chunk.js",
     "static/css/main.d370f975.chunk.css",
-    "static/js/main.b5d46e06.chunk.js"
+    "static/js/main.0cea35c0.chunk.js"
   ]
 }
