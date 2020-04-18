@@ -39,7 +39,8 @@ const QuickSimu = ({
         compact
         color="brown"
       >
-        You can adjust the number of judges/scramblers/runners in the settings.
+        You can adjust the number of judges/scramblers/runners,
+        as well as the miscramble or extra rate in the settings.
       </Message>
       <div>
         I want to simulate this group for
