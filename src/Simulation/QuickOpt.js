@@ -74,7 +74,7 @@ const QuickOpt = ({
         <div>
           This group is for
           {' '}
-          <EventPicker event={event} setEvent={setEvent} inline upward={false} />
+          <EventPicker event={event} setEvent={setEvent} inline scrolling />
           {' '}
           and my staff will be using the
           {' '}

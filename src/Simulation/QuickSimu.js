@@ -44,7 +44,7 @@ const QuickSimu = ({
       <div>
         I want to simulate this group for
         {' '}
-        <EventPicker event={event} setEvent={setEvent} inline />
+        <EventPicker event={event} setEvent={setEvent} inline scrolling />
         {' '}
         and my staff will be using the
         {' '}
