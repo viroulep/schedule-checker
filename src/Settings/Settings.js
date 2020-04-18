@@ -4,18 +4,42 @@ import {
   Grid,
   Header,
   Form,
-  Button,
+  Dropdown,
   Segment,
   Message,
   Menu,
 } from 'semantic-ui-react';
 import _ from 'lodash';
-import { asMap, asObject } from '@viroulep/group-simulator';
+import { asMap } from '@viroulep/group-simulator';
 
 import {
   isPartiallyActive, isExactlyActive,
 } from '../Navigation/utils';
 import './Settings.scss';
+import { storeConfig, loadStoredConfig, clearAndRefresh } from '../utils';
+
+const DropdownMenu = ({
+  saveAction,
+  hasChanges,
+}) => (
+  <Dropdown item icon="cogs" className="right">
+    <Dropdown.Menu>
+      <Dropdown.Item
+        onClick={saveAction}
+        disabled={!hasChanges}
+      >
+        Save settings
+      </Dropdown.Item>
+      <Dropdown.Item onClick={clearAndRefresh}>Reset settings to default</Dropdown.Item>
+    </Dropdown.Menu>
+  </Dropdown>
+);
+
+/* TODO: for import/export
+<Dropdown.Divider />
+  <Dropdown.Header>Export</Dropdown.Header>
+  <Dropdown.Item>Share</Dropdown.Item>
+  */
 
 const SettingsPanel = ({
   props,
@@ -59,9 +83,7 @@ const Settings = ({
   const [saved, setSaved] = useState({});
 
   useEffect(() => {
-    const mapSetup = asObject(simulator.getSetupProps());
-    const mapModel = asObject(simulator.getModelProps());
-    const mapScrambling = asObject(simulator.getScramblingProps());
+    const { mapSetup, mapModel, mapScrambling } = loadStoredConfig(simulator);
     setSetup(mapSetup);
     setModel(mapModel);
     setScrambling(mapScrambling);
@@ -73,27 +95,20 @@ const Settings = ({
   }, [simulator]);
 
   const loadConfig = () => {
+    const newConfig = { setup, model, scrambling };
     simulator.loadConfig(
       asMap(simulator.MapStringInt, setup),
       asMap(simulator.MapStringInt, model),
       asMap(simulator.MapStringInt, scrambling),
     );
-    setSaved({ setup, model, scrambling });
+    setSaved(newConfig);
+    storeConfig(newConfig);
   }
 
   const seHasChanges = !_.isEqual(saved.setup, setup);
   const mHasChanges = !_.isEqual(saved.model, model);
   const scHasChanges = !_.isEqual(saved.scrambling, scrambling);
   const hasAnyChange = seHasChanges || mHasChanges || scHasChanges;
-
-  const saveButton = (
-    <Button
-      content="Save settings"
-      onClick={loadConfig}
-      disabled={!hasAnyChange}
-      positive
-    />
-  );
 
   /* eslint-disable jsx-a11y/anchor-is-valid */
   return (
@@ -122,9 +137,9 @@ const Settings = ({
           {' '}
           {scHasChanges ? '*' : ''}
         </Link>
-        <Menu.Item
-          position="right"
-          content={saveButton}
+        <DropdownMenu
+          saveAction={loadConfig}
+          hasChanges={hasAnyChange}
         />
       </Menu>
       <Segment attached="bottom">

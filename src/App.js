@@ -9,6 +9,7 @@ import './App.css';
 import Navigation from './Navigation/Navigation';
 import Settings from './Settings/Settings';
 import QuickRunPage from './Simulation/QuickRun';
+import { loadStoredConfig } from './utils';
 
 // https://github.com/rafrex/spa-github-pages
 
@@ -94,6 +95,8 @@ function App() {
     // Register a timeout on the loading process
     setTimeout(() => setLoading(false), 3000);
   }, []);
+
+  useEffect(() => { loadStoredConfig(simulator); }, [simulator]);
 
   return (
     <Container>
