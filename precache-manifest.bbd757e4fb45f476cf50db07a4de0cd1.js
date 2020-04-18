@@ -4,7 +4,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/schedule-checker/group-simulator.79529a4c.wasm"
   },
   {
-    "revision": "79e5abb4c7c4db74c5f883fd8a8ce150",
+    "revision": "48e2e34241525e9519cabf13fb3397c7",
     "url": "/schedule-checker/index.html"
   },
   {
@@ -12,7 +12,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/schedule-checker/static/css/2.b91fe813.chunk.css"
   },
   {
-    "revision": "aaed4a725719f95e3553",
+    "revision": "5ae830fc11c1ae0760d1",
     "url": "/schedule-checker/static/css/main.d370f975.chunk.css"
   },
   {
@@ -24,8 +24,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/schedule-checker/static/js/2.bac47d1d.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "aaed4a725719f95e3553",
-    "url": "/schedule-checker/static/js/main.89de62f0.chunk.js"
+    "revision": "5ae830fc11c1ae0760d1",
+    "url": "/schedule-checker/static/js/main.3f5f5f93.chunk.js"
   },
   {
     "revision": "093fa36e026064f66fdc",
