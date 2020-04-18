@@ -1,27 +1,27 @@
 {
   "files": {
     "main.css": "/schedule-checker/static/css/main.d370f975.chunk.css",
-    "main.js": "/schedule-checker/static/js/main.c1e547f7.chunk.js",
-    "main.js.map": "/schedule-checker/static/js/main.c1e547f7.chunk.js.map",
+    "main.js": "/schedule-checker/static/js/main.89de62f0.chunk.js",
+    "main.js.map": "/schedule-checker/static/js/main.89de62f0.chunk.js.map",
     "runtime-main.js": "/schedule-checker/static/js/runtime-main.6c3697af.js",
     "runtime-main.js.map": "/schedule-checker/static/js/runtime-main.6c3697af.js.map",
     "static/css/2.b91fe813.chunk.css": "/schedule-checker/static/css/2.b91fe813.chunk.css",
-    "static/js/2.11b88eee.chunk.js": "/schedule-checker/static/js/2.11b88eee.chunk.js",
-    "static/js/2.11b88eee.chunk.js.map": "/schedule-checker/static/js/2.11b88eee.chunk.js.map",
+    "static/js/2.bac47d1d.chunk.js": "/schedule-checker/static/js/2.bac47d1d.chunk.js",
+    "static/js/2.bac47d1d.chunk.js.map": "/schedule-checker/static/js/2.bac47d1d.chunk.js.map",
     "group-simulator.wasm": "/schedule-checker/group-simulator.79529a4c.wasm",
     "index.html": "/schedule-checker/index.html",
-    "precache-manifest.bce9b07075346d278601ff3d82e3d33e.js": "/schedule-checker/precache-manifest.bce9b07075346d278601ff3d82e3d33e.js",
+    "precache-manifest.1b230785f2bb99e79cd138164f2dc108.js": "/schedule-checker/precache-manifest.1b230785f2bb99e79cd138164f2dc108.js",
     "service-worker.js": "/schedule-checker/service-worker.js",
     "static/css/2.b91fe813.chunk.css.map": "/schedule-checker/static/css/2.b91fe813.chunk.css.map",
     "static/css/main.d370f975.chunk.css.map": "/schedule-checker/static/css/main.d370f975.chunk.css.map",
-    "static/js/2.11b88eee.chunk.js.LICENSE.txt": "/schedule-checker/static/js/2.11b88eee.chunk.js.LICENSE.txt",
+    "static/js/2.bac47d1d.chunk.js.LICENSE.txt": "/schedule-checker/static/js/2.bac47d1d.chunk.js.LICENSE.txt",
     "static/media/semantic.css": "/schedule-checker/static/media/outline-icons.ece54318.ttf"
   },
   "entrypoints": [
     "static/js/runtime-main.6c3697af.js",
     "static/css/2.b91fe813.chunk.css",
-    "static/js/2.11b88eee.chunk.js",
+    "static/js/2.bac47d1d.chunk.js",
     "static/css/main.d370f975.chunk.css",
-    "static/js/main.c1e547f7.chunk.js"
+    "static/js/main.89de62f0.chunk.js"
   ]
 }
