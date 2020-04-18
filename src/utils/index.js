@@ -49,7 +49,12 @@ export const loadStoredConfig = (simulator) => {
 
 export const storeConfig = (conf) => ls('config', conf);
 
-export const clearAndRefresh = () => {
+export const clearAndRefreshSettings = () => {
   ls('config', {});
+  document.location.reload();
+};
+
+export const clearAndRefresh = () => {
+  ls.clear();
   document.location.reload();
 };

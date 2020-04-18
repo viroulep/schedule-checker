@@ -1,12 +1,20 @@
 import React from 'react';
-import { Menu } from 'semantic-ui-react';
+import {
+  Menu, Dropdown, Item, Icon,
+} from 'semantic-ui-react';
 import { Link } from '@reach/router';
 import {
   isPartiallyActive, isExactlyActive, prefixed,
 } from './utils';
+import { clearAndRefresh } from '../utils';
+import { signIn } from '../wca/api';
 
-
-const Navigation = () => (
+/* eslint-disable jsx-a11y/anchor-is-valid */
+const Navigation = ({
+  user,
+  userLoading,
+  signOut,
+}) => (
   <Menu pointing secondary>
     <Link to={prefixed('/')} getProps={isExactlyActive}>
       Home
@@ -17,6 +25,28 @@ const Navigation = () => (
     <Link to={prefixed('/quick-simu')} getProps={isPartiallyActive}>
       Quick simulation
     </Link>
+    {userLoading && (
+      <Item className="right">
+        <Icon loading name="spinner" />
+      </Item>
+    )}
+    {user && (
+      <Dropdown item text={user.name} className="right" simple>
+        <Dropdown.Menu>
+          <Dropdown.Item onClick={signOut}>
+            Sign out
+          </Dropdown.Item>
+          <Dropdown.Item onClick={clearAndRefresh}>
+            Clear locally stored data
+          </Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
+    )}
+    {!user && !userLoading && (
+      <a href="#" className="item right" onClick={signIn}>
+        Sign in with the WCA
+      </a>
+    )}
   </Menu>
 );
 

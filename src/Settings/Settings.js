@@ -16,7 +16,7 @@ import {
   isPartiallyActive, isExactlyActive,
 } from '../Navigation/utils';
 import './Settings.scss';
-import { storeConfig, loadStoredConfig, clearAndRefresh } from '../utils';
+import { storeConfig, loadStoredConfig, clearAndRefreshSettings } from '../utils';
 
 const DropdownMenu = ({
   saveAction,
@@ -30,7 +30,7 @@ const DropdownMenu = ({
       >
         Save settings
       </Dropdown.Item>
-      <Dropdown.Item onClick={clearAndRefresh}>Reset settings to default</Dropdown.Item>
+      <Dropdown.Item onClick={clearAndRefreshSettings}>Reset settings to default</Dropdown.Item>
     </Dropdown.Menu>
   </Dropdown>
 );

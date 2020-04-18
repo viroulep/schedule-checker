@@ -10,6 +10,13 @@ import Navigation from './Navigation/Navigation';
 import Settings from './Settings/Settings';
 import QuickRunPage from './Simulation/QuickRun';
 import { loadStoredConfig } from './utils';
+import {
+  signOut,
+  setOauthToken,
+  loginUser,
+  setRemoteIfNeeded,
+} from './wca/api';
+import { isStaging } from './wca/routes';
 
 // https://github.com/rafrex/spa-github-pages
 
@@ -81,9 +88,20 @@ const Home = () => (
 
 const NotFound = () => <p>Oups, it&apos;s a 404</p>;
 
+const getOauthTokenIfAny = () => {
+  const hash = window.location.hash.replace(/^#/, '');
+  const hashParams = new URLSearchParams(hash);
+  if (hashParams.has('access_token')) {
+    window.location.hash = '';
+    setOauthToken(hashParams.get('access_token'));
+  }
+};
+
 function App() {
   const [simulator, setSimulator] = useState(undefined);
   const [loading, setLoading] = useState(true);
+  const [userLoading, setUserLoading] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
 
   const loadWasm = async () => {
     const wasm = getSimu(() => { setSimulator(wasm); setLoading(false) });
@@ -92,18 +110,35 @@ function App() {
   // Pass '[]' as a dependency, so that it's ran just once.
   useEffect(() => {
     loadWasm();
+    setRemoteIfNeeded();
+    getOauthTokenIfAny();
+    loginUser(setCurrentUser, setUserLoading);
     // Register a timeout on the loading process
     setTimeout(() => setLoading(false), 3000);
   }, []);
 
   useEffect(() => { loadStoredConfig(simulator); }, [simulator]);
 
+  const signOutAction = () => {
+    signOut();
+    setCurrentUser(null);
+  };
+
   return (
     <Container>
       <LoadingWasm simulator={simulator} loading={loading} />
       {simulator && (
         <>
-          <Navigation />
+          <Navigation
+            user={currentUser}
+            userLoading={userLoading}
+            signOut={signOutAction}
+          />
+          {isStaging() && (
+            <Message size="small">
+              You&apos;re not currently using the WCA&apos;s production data.
+            </Message>
+          )}
           <Router basepath={process.env.PUBLIC_URL}>
             <Home path="/" />
             <Settings simulator={simulator} path="settings/*" />
