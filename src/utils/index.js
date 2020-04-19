@@ -1,5 +1,6 @@
 import ls from 'local-storage';
 import { asMap, asObject } from '@viroulep/group-simulator';
+import { prefixed } from '../Navigation/utils';
 
 const SECS_IN_MINUTE = 60;
 const SECS_IN_HOUR = 60 * SECS_IN_MINUTE;
@@ -56,5 +57,5 @@ export const clearAndRefreshSettings = () => {
 
 export const clearAndRefresh = () => {
   ls.clear();
-  document.location.reload();
+  window.location = prefixed('/');
 };

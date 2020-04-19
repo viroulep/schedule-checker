@@ -13,7 +13,6 @@ import { signIn } from '../wca/api';
 const Navigation = ({
   user,
   userLoading,
-  signOut,
 }) => (
   <Menu pointing secondary>
     <Link to={prefixed('/')} getProps={isExactlyActive}>
@@ -25,6 +24,11 @@ const Navigation = ({
     <Link to={prefixed('/quick-simu')} getProps={isPartiallyActive}>
       Quick simulation
     </Link>
+    {user && (
+      <Link to={prefixed('/competitions')} getProps={isPartiallyActive}>
+        My competitions
+      </Link>
+    )}
     {userLoading && (
       <Item className="right">
         <Icon loading name="spinner" />
@@ -33,11 +37,8 @@ const Navigation = ({
     {user && (
       <Dropdown item text={user.name} className="right" simple>
         <Dropdown.Menu>
-          <Dropdown.Item onClick={signOut}>
-            Sign out
-          </Dropdown.Item>
           <Dropdown.Item onClick={clearAndRefresh}>
-            Clear locally stored data
+            Sign out
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>

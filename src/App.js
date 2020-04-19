@@ -11,12 +11,12 @@ import Settings from './Settings/Settings';
 import QuickRunPage from './Simulation/QuickRun';
 import { loadStoredConfig } from './utils';
 import {
-  signOut,
   setOauthToken,
   loginUser,
   setRemoteIfNeeded,
 } from './wca/api';
 import { isStaging } from './wca/routes';
+import CompetitionsList from './Competitions/IndexList';
 
 // https://github.com/rafrex/spa-github-pages
 
@@ -97,6 +97,11 @@ const getOauthTokenIfAny = () => {
   }
 };
 
+const Competitions = ({ children }) => <>{children}</>;
+const Competition = ({
+  competitionId,
+}) => <div>{competitionId}</div>;
+
 function App() {
   const [simulator, setSimulator] = useState(undefined);
   const [loading, setLoading] = useState(true);
@@ -119,11 +124,6 @@ function App() {
 
   useEffect(() => { loadStoredConfig(simulator); }, [simulator]);
 
-  const signOutAction = () => {
-    signOut();
-    setCurrentUser(null);
-  };
-
   return (
     <Container>
       <LoadingWasm simulator={simulator} loading={loading} />
@@ -132,7 +132,6 @@ function App() {
           <Navigation
             user={currentUser}
             userLoading={userLoading}
-            signOut={signOutAction}
           />
           {isStaging() && (
             <Message size="small">
@@ -143,6 +142,12 @@ function App() {
             <Home path="/" />
             <Settings simulator={simulator} path="settings/*" />
             <QuickRunPage simulator={simulator} path="/quick-simu" />
+            {currentUser && (
+              <Competitions path="competitions">
+                <CompetitionsList path="/" />
+                <Competition path=":competitionId" />
+              </Competitions>
+            )}
             <NotFound default />
           </Router>
         </>

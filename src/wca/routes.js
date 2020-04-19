@@ -5,10 +5,12 @@ const stagingBaseUrl = 'https://staging.worldcubeassociation.org';
 const overridenBaseUrl = process.env.REACT_APP_WCA_URL;
 
 export const setStaging = () => {
+  ls.clear();
   ls('staging', true);
   document.location.reload();
 };
 export const setProd = () => {
+  ls.clear();
   ls('staging', false);
   document.location.reload();
 };

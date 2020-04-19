@@ -2,6 +2,7 @@ import ls from 'local-storage';
 import {
   selfUrl,
   competitionWcifUrl,
+  competitionsUrl,
   getOauthClientId,
   oauthUrl,
   setStaging,
@@ -13,18 +14,13 @@ import {
 const getOauthToken = () => ls('token') || '';
 
 export const setOauthToken = (token) => ls('token', token);
-export const signOut = () => {
-  ls('token', '');
-};
 
 export const setRemoteIfNeeded = () => {
   const params = new URLSearchParams(window.location.search);
   if (params.has('staging') && !isStaging()) {
-    signOut();
     setStaging();
   }
   if (params.has('prod') && isStaging()) {
-    signOut();
     setProd();
   }
 };
@@ -46,6 +42,15 @@ const wcaApiFetch = (url, fetchOptions = {}) => fetch(url,
 export const getMe = () => wcaApiFetch(selfUrl());
 export const getCompetitionWcif = (id) => wcaApiFetch(competitionWcifUrl(id));
 
+export const getManageableCompetitions = () => {
+  // Last 12 months: months * days * hours * minByHour * secByMin * milli
+  const oneYearAgo = new Date(Date.now() - 12 * 28 * 24 * 60 * 60 * 1000);
+  const params = new URLSearchParams({
+    managed_by_me: true,
+    start: oneYearAgo.toISOString(),
+  });
+  return wcaApiFetch(competitionsUrl(`?${params.toString()}`));
+};
 
 // Call this upon loading to get the token in local storage is still valid!
 export const loginUser = (setUser, setLoading) => {
