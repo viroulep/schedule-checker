@@ -52,7 +52,8 @@ export const getManageableCompetitions = () => {
   return wcaApiFetch(competitionsUrl(`?${params.toString()}`));
 };
 
-// Call this upon loading to get the token in local storage is still valid!
+// Call this upon loading to check the token in local storage is still valid!
+// TODO: store user, only re-login if token is expired!
 export const loginUser = (setUser, setLoading) => {
   if (getOauthToken().length === 0) {
     return;
@@ -63,7 +64,7 @@ export const loginUser = (setUser, setLoading) => {
     setUser(user.me);
   }).catch(() => {
     // invalid token or other error, reset everything.
-    ls('token', '');
+    ls.clear();
   }).finally(() => setLoading(false));
 };
 

@@ -17,8 +17,7 @@ import {
 } from './wca/api';
 import { isStaging } from './wca/routes';
 import CompetitionsList from './Competitions/IndexList';
-
-// https://github.com/rafrex/spa-github-pages
+import Competition from './Competitions/Show';
 
 const LoadingMessage = () => (
   <>
@@ -98,9 +97,6 @@ const getOauthTokenIfAny = () => {
 };
 
 const Competitions = ({ children }) => <>{children}</>;
-const Competition = ({
-  competitionId,
-}) => <div>{competitionId}</div>;
 
 function App() {
   const [simulator, setSimulator] = useState(undefined);

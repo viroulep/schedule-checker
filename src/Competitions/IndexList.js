@@ -1,40 +1,16 @@
 import React from 'react';
 import { Link } from '@reach/router';
 import {
-  Menu, Header, Loader, Placeholder, Dimmer, Segment, Message,
+  Menu, Header, Segment,
 } from 'semantic-ui-react';
 import cn from 'classnames';
 
 import { getManageableCompetitions } from '../wca/api';
 import { usePersistence } from '../wca/persistence';
 import SyncIcon from './SyncIcon';
+import LoadingError from '../UtilsComponents/LoadingError';
+import LoadingPlaceholder from '../UtilsComponents/LoadingPlaceholder';
 import './IndexList.scss';
-
-const LoadingPlaceholder = () => (
-  <>
-    <Dimmer active inverted>
-      <Loader active inverted />
-    </Dimmer>
-    <Placeholder>
-      <Placeholder.Line />
-      <Placeholder.Line />
-    </Placeholder>
-  </>
-);
-
-const ErrorMessage = ({ error }) => (
-  <Message negative>
-    Something wrong happened when loading the data:
-    <pre>
-      {error}
-    </pre>
-    Your authentification token may have expired, you may try to sign out then
-    back in, or to use the &quot;Clear locally stored data&quot; option in the menu.
-    <br />
-    If the issue persists, it most likely means the WCA website is unreachable.
-    or the WCA website is unreachable.
-  </Message>
-);
 
 const Competitions = ({
   competitions,
@@ -70,7 +46,7 @@ const IndexList = () => {
         />
       </Header>
       {error && (
-        <ErrorMessage error={error} />
+        <LoadingError error={error} />
       )}
       {loading && (
         <Segment>

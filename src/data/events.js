@@ -127,13 +127,21 @@ const events = [
   },
 ];
 
-const byId = {
-};
+const byId = {};
 
 events.forEach((e) => { byId[e.id] = e; });
 
+const simulatedId = [];
+
+events.forEach((e) => {
+  if (e.rank < 900 && !['333fm', '333mbf'].includes(e.id)) {
+    simulatedId.push(e.id);
+  }
+});
+
 export default {
   official: events.filter((e) => e.rank < 900),
-  forSimulation: events.filter((e) => e.rank < 900 && !['333fm', '333mbf'].includes(e.id)),
+  forSimulation: events.filter((e) => simulatedId.includes(e.id)),
   byId,
+  simulatedId,
 };
