@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import {
   Grid, Header, Segment,
 } from 'semantic-ui-react';
@@ -9,8 +9,34 @@ import { usePersistence } from '../wca/persistence';
 import SyncIcon from './SyncIcon';
 import LoadingError from '../UtilsComponents/LoadingError';
 import LoadingPlaceholder from '../UtilsComponents/LoadingPlaceholder';
-import { parseActivityCode, activityCodeToName } from '../wca/wcif';
-import events from '../data/events';
+import Round from './Round';
+
+const buildIndex = (wcif, setPbMap, setGroupMap) => {
+  const pbMap = {
+  };
+  const groupsById = {
+  };
+
+  wcif.persons.forEach((p) => {
+    if (!p.registrantId) {
+      return;
+    }
+    const pbs = {};
+    p.personalBests.forEach((pb) => { pbs[pb.eventId] = Math.floor(pb.best / 100); });
+    pbMap[p.registrantId] = pbs;
+    p.assignments.forEach((a) => {
+      if (a.assignmentCode === 'competitor') {
+        if (!groupsById[a.activityId]) {
+          groupsById[a.activityId] = [];
+        }
+        groupsById[a.activityId].push(p.registrantId);
+      }
+    });
+  });
+
+  setPbMap(pbMap);
+  setGroupMap(groupsById);
+};
 
 const getAllActivities = (schedule) => {
   // Return all activities for first venue/first room
@@ -27,32 +53,32 @@ const getAllActivities = (schedule) => {
 };
 
 const CompetitionInfo = ({
+  simulator,
   comp,
 }) => {
   const { schedule } = comp;
   const allActivities = getAllActivities(schedule);
-  console.log(allActivities);
+  const [pbMap, setPbMap] = useState({});
+  const [groupsById, setGroups] = useState({});
+  useEffect(() => buildIndex(comp, setPbMap, setGroups), [comp]);
+
   return (
     <>
-      <p>See the activities below, if any.</p>
+      <p>
+        See the activities below, if any. Green means that it can be simulated,
+        Red means it cannot.
+      </p>
       <Grid columns={3} stackable>
-        {allActivities.map((activity) => {
-          const { activityCode, name } = activity;
-          const { eventId } = parseActivityCode(activityCode);
-          const simulated = events.simulatedId.includes(eventId);
-          const color = simulated ? 'green' : 'red';
-          return (
-            <Grid.Column key={activity.id}>
-              <Segment color={color}>
-                {eventId ? (
-                  activityCodeToName(activityCode)
-                ) : (
-                  name
-                )}
-              </Segment>
-            </Grid.Column>
-          );
-        })}
+        {allActivities.map((activity) => (
+          <Round
+            key={activity.id}
+            activity={activity}
+            comp={comp}
+            pbMap={pbMap}
+            groupsById={groupsById}
+            simulator={simulator}
+          />
+        ))}
       </Grid>
     </>
   )
@@ -60,6 +86,7 @@ const CompetitionInfo = ({
 
 const Competition = ({
   competitionId,
+  simulator,
 }) => {
   const fetchData = useCallback(
     () => getCompetitionWcif(competitionId),
@@ -72,10 +99,9 @@ const Competition = ({
     fetchData,
   );
   const { data, lastFetched } = loadedData;
-  console.log(data);
   return (
     <>
-      <Header className="my-comps">
+      <Header as="h1" className="my-comps">
         {data ? (
           data.name
         ) : (
@@ -96,7 +122,7 @@ const Competition = ({
         </Segment>
       )}
       {!loading && data && (
-        <CompetitionInfo comp={data} />
+        <CompetitionInfo comp={data} simulator={simulator} />
       )}
     </>
   );

@@ -141,7 +141,7 @@ function App() {
             {currentUser && (
               <Competitions path="competitions">
                 <CompetitionsList path="/" />
-                <Competition path=":competitionId" />
+                <Competition path=":competitionId" simulator={simulator} />
               </Competitions>
             )}
             <NotFound default />
