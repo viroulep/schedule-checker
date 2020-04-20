@@ -2,11 +2,15 @@ import React, { useState, useEffect } from 'react';
 import {
   Form, Button, Modal,
 } from 'semantic-ui-react';
+import _ from 'lodash';
 
 import { setInt } from '../utils';
 
 const generateRandomArray = (min, max, size) => Array.from(Array(size))
   .map(() => Math.floor(Math.random() * (max - min + 1)) + min);
+
+const DEFAULT_MIN = 10;
+const DEFAULT_MAX = 15;
 
 const ModalGenRandom = ({
   times,
@@ -16,9 +20,9 @@ const ModalGenRandom = ({
 }) => {
   const [open, setOpenValue] = useState(false);
   const [generated, setGenerated] = useState([]);
-  const [min, setMin] = useState(10);
-  const [max, setMax] = useState(15);
-  const [amount, setAmount] = useState(20);
+  const [min, setMin] = useState(DEFAULT_MIN);
+  const [max, setMax] = useState(DEFAULT_MAX);
+  const [amount, setAmount] = useState(10);
 
   const setOpen = () => setOpenValue(true);
   const setClose = () => setOpenValue(false);
@@ -31,7 +35,11 @@ const ModalGenRandom = ({
     ...generateRandomArray(min, max, amount),
   ]);
 
-  useEffect(() => setGenerated(times), [times]);
+  useEffect(() => {
+    setGenerated(times);
+    setMin(_.min(times) || DEFAULT_MIN);
+    setMax(_.max(times) || DEFAULT_MAX);
+  }, [times]);
 
   return (
     <>
