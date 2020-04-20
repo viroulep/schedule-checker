@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Form, Button, Modal,
+  Segment, Divider, Header, Form, Button, Modal, Grid,
 } from 'semantic-ui-react';
 import _ from 'lodash';
 
@@ -12,20 +12,13 @@ const generateRandomArray = (min, max, size) => Array.from(Array(size))
 const DEFAULT_MIN = 10;
 const DEFAULT_MAX = 15;
 
-const ModalGenRandom = ({
-  times,
-  setTimes,
-  OpenButton,
-  headerContent,
+const FormAddRandom = ({
+  generated,
+  setGenerated,
 }) => {
-  const [open, setOpenValue] = useState(false);
-  const [generated, setGenerated] = useState([]);
   const [min, setMin] = useState(DEFAULT_MIN);
   const [max, setMax] = useState(DEFAULT_MAX);
   const [amount, setAmount] = useState(10);
-
-  const setOpen = () => setOpenValue(true);
-  const setClose = () => setOpenValue(false);
   const error = min > max ? {
     content: 'Max must be greater than min',
   } : null;
@@ -36,10 +29,91 @@ const ModalGenRandom = ({
   ]);
 
   useEffect(() => {
+    setMin(_.min(generated) || DEFAULT_MIN);
+    setMax(_.max(generated) || DEFAULT_MAX);
+  }, [generated]);
+
+  return (
+    <>
+      <Header as="h4" textAlign="center">
+        Generate random times
+      </Header>
+      <p>
+        The form below let you add some randomly generated number within
+        {' '}
+        <em>min</em>
+        {' '}
+        and
+        {' '}
+        <em>max</em>
+        .
+      </p>
+      <Form>
+        <Form.Input
+          inline
+          min={1}
+          type="number"
+          label="Min"
+          value={min}
+          onChange={(e) => setInt(e, setMin, min)}
+        />
+        <Form.Input
+          inline
+          min={1}
+          type="number"
+          label="Max"
+          value={max}
+          error={error}
+          onChange={(e) => setInt(e, setMax, max)}
+        />
+        <Form.Input
+          inline
+          min={1}
+          type="number"
+          label="Amount"
+          value={amount}
+          onChange={(e) => setInt(e, setAmount, amount)}
+        />
+        <Button
+          color="violet"
+          disabled={!!error}
+          content="Generate and append"
+          onClick={generateAndAppend}
+        />
+      </Form>
+    </>
+  )
+};
+
+const FormAddOne = ({
+  generated,
+  setGenerated,
+}) => {
+  return (
+    <>
+      <Header as="h4" textAlign="center">
+        Add specific time(s)
+      </Header>
+      <div>This is a work in progress.</div>
+    </>
+  );
+};
+
+const ModalGenRandom = ({
+  times,
+  setTimes,
+  OpenButton,
+  headerContent,
+}) => {
+  const [open, setOpenValue] = useState(false);
+  const [generated, setGenerated] = useState([]);
+
+  const setOpen = () => setOpenValue(true);
+  const setClose = () => setOpenValue(false);
+
+  useEffect(() => {
     setGenerated(times);
-    setMin(_.min(times) || DEFAULT_MIN);
-    setMax(_.max(times) || DEFAULT_MAX);
-  }, [times]);
+  }, [times, open]);
 
   return (
     <>
@@ -73,55 +147,24 @@ const ModalGenRandom = ({
             <code>
               {generated.join(', ')}
             </code>
-            <br />
-            The form below let you add some randomly generated number within
-            {' '}
-            <em>min</em>
-            {' '}
-            and
-            {' '}
-            <em>max</em>
-            .
           </p>
-          <Form>
-            <Form.Input
-              inline
-              min={1}
-              type="number"
-              label="Min"
-              value={min}
-              onChange={(e) => setInt(e, setMin, min)}
-            />
-            <Form.Input
-              inline
-              min={1}
-              type="number"
-              label="Max"
-              value={max}
-              error={error}
-              onChange={(e) => setInt(e, setMax, max)}
-            />
-            <Form.Input
-              inline
-              min={1}
-              type="number"
-              label="Amount"
-              value={amount}
-              onChange={(e) => setInt(e, setAmount, amount)}
-            />
-            <Button
-              color="violet"
-              disabled={!!error}
-              content="Generate and append"
-              onClick={generateAndAppend}
-            />
-            <Button
-              basic
-              negative
-              content="Clear times"
-              onClick={() => setGenerated([])}
-            />
-          </Form>
+          <Segment basic>
+          <Grid columns={2} relaxed="very" className="mb-2" >
+            <Grid.Column>
+              <FormAddRandom generated={generated} setGenerated={setGenerated} />
+            </Grid.Column>
+            <Grid.Column>
+              <FormAddOne generated={generated} setGenerated={setGenerated} />
+            </Grid.Column>
+          </Grid>
+            <Divider vertical>Or</Divider>
+          </Segment>
+          <Button
+            basic
+            negative
+            content="Clear times"
+            onClick={() => setGenerated([])}
+          />
         </Modal.Content>
         <Modal.Actions>
           <Button.Group>
