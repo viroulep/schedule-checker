@@ -3,8 +3,6 @@ import {
   List, Header, Grid, Segment,
 } from 'semantic-ui-react';
 import Group from './Group';
-import { parseActivityCode } from '../wca/wcif';
-import events from '../data/events';
 
 
 const Round = ({
@@ -14,12 +12,10 @@ const Round = ({
   pbMap,
   groupsById,
 }) => {
-  const { activityCode, name, childActivities } = activity;
-  const { eventId } = parseActivityCode(activityCode);
-
+  const { name, childActivities } = activity;
   return (
     <Grid.Column key={activity.id}>
-      <Segment color={events.simulatedId.includes(eventId) ? 'green' : 'red'}>
+      <Segment color="black">
         <Header as="h3">{name}</Header>
         <List divided relaxed>
           {childActivities.map((ca) => (

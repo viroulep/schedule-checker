@@ -1,15 +1,19 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, {
+  Fragment, useCallback, useState, useEffect,
+} from 'react';
 import {
-  Grid, Header, Segment,
+  Grid, Header, Segment, Checkbox,
 } from 'semantic-ui-react';
 import _ from 'lodash';
 
 import { getCompetitionWcif } from '../wca/api';
+import { parseActivityCode } from '../wca/wcif';
 import { usePersistence } from '../wca/persistence';
 import SyncIcon from './SyncIcon';
 import LoadingError from '../UtilsComponents/LoadingError';
 import LoadingPlaceholder from '../UtilsComponents/LoadingPlaceholder';
 import Round from './Round';
+import events from '../data/events';
 
 const buildIndex = (wcif, setPbMap, setGroupMap) => {
   const pbMap = {
@@ -38,7 +42,9 @@ const buildIndex = (wcif, setPbMap, setGroupMap) => {
   setGroupMap(groupsById);
 };
 
-const getAllActivities = (schedule) => {
+const formatDate = (d) => `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+
+const getAllActivities = (schedule, onlySimulated) => {
   // Return all activities for first venue/first room
   // TODO: extend to take for a given room
   const venue = schedule.venues[0];
@@ -49,7 +55,11 @@ const getAllActivities = (schedule) => {
   if (!room) {
     return [];
   }
-  return _.sortBy(room.activities, ['startTime']);
+  const sortedActivities = _.sortBy(room.activities.filter(
+    (a) => !onlySimulated
+    || events.simulatedId.includes(parseActivityCode(a.activityCode).eventId),
+  ), ['startTime']);
+  return _.groupBy(sortedActivities, (a) => formatDate(new Date(a.startTime)));
 };
 
 const CompetitionInfo = ({
@@ -57,29 +67,42 @@ const CompetitionInfo = ({
   comp,
 }) => {
   const { schedule } = comp;
-  const allActivities = getAllActivities(schedule);
   const [pbMap, setPbMap] = useState({});
   const [groupsById, setGroups] = useState({});
+  const [onlySimulated, setOnlySimulated] = useState(true);
+  const allActivities = getAllActivities(schedule, onlySimulated);
   useEffect(() => buildIndex(comp, setPbMap, setGroups), [comp]);
 
   return (
     <>
       <p>
-        See the activities below, if any. Green means that it can be simulated,
-        Red means it cannot.
+        You can review the schedule below.
       </p>
-      <Grid columns={3} stackable>
-        {allActivities.map((activity) => (
-          <Round
-            key={activity.id}
-            activity={activity}
-            comp={comp}
-            pbMap={pbMap}
-            groupsById={groupsById}
-            simulator={simulator}
-          />
-        ))}
-      </Grid>
+      <Checkbox
+        toggle
+        label="Show only event that can be simulated"
+        checked={onlySimulated}
+        onChange={() => setOnlySimulated(!onlySimulated)}
+      />
+      {_.map(allActivities, (v, k) => (
+        <Fragment key={k}>
+          <Header as="h2">
+            {new Date(k).toDateString()}
+          </Header>
+          <Grid columns={3} stackable>
+            {v.map((activity) => (
+              <Round
+                key={activity.id}
+                activity={activity}
+                comp={comp}
+                pbMap={pbMap}
+                groupsById={groupsById}
+                simulator={simulator}
+              />
+            ))}
+          </Grid>
+        </Fragment>
+      ))}
     </>
   )
 };
