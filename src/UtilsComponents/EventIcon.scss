@@ -1,0 +1,4 @@
+// Cubing icons in header look better when header's content is aligned bottom!
+.ui.header > .icon.cubing-icon + .content {
+  vertical-align: bottom;
+}

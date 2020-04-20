@@ -5,7 +5,7 @@ import {
 import { getSimu } from '@viroulep/group-simulator';
 import { Router } from '@reach/router';
 
-import './App.css';
+import './App.scss';
 import Navigation from './Navigation/Navigation';
 import Settings from './Settings/Settings';
 import QuickRunPage from './Simulation/QuickRun';

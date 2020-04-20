@@ -2,7 +2,7 @@ import React, {
   Fragment, useCallback, useState, useEffect,
 } from 'react';
 import {
-  Grid, Header, Segment, Checkbox,
+  Divider, Grid, Header, Segment, Checkbox,
 } from 'semantic-ui-react';
 import _ from 'lodash';
 
@@ -86,9 +86,11 @@ const CompetitionInfo = ({
       />
       {_.map(allActivities, (v, k) => (
         <Fragment key={k}>
-          <Header as="h2">
-            {new Date(k).toDateString()}
-          </Header>
+          <Divider horizontal>
+            <Header as="h2">
+              {new Date(k).toDateString()}
+            </Header>
+          </Divider>
           <Grid columns={3} stackable>
             {v.map((activity) => (
               <Round

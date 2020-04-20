@@ -17,11 +17,11 @@ export const setProd = () => {
 
 export const isStaging = () => overridenBaseUrl || ls('staging');
 
-const WCA_URL = overridenBaseUrl || (isStaging() ? stagingBaseUrl : prodBaseUrl);
+const wcaUrl = () => (overridenBaseUrl || (isStaging() ? stagingBaseUrl : prodBaseUrl));
 
 export const getOauthClientId = () => (isStaging() ? 'example-application-id' : '3A9BGEPZcmf7CA1D77meVRMzFGT-CZq6-6oXyPgelMU');
 
-export const baseUrl = (path = '') => `${WCA_URL}${path}`;
+export const baseUrl = (path = '') => `${wcaUrl()}${path}`;
 
 export const oauthUrl = (paramsAsString) => baseUrl(`/oauth/authorize?${paramsAsString}`);
 

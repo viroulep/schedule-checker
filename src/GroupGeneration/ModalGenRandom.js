@@ -12,6 +12,7 @@ const ModalGenRandom = ({
   times,
   setTimes,
   OpenButton,
+  headerContent,
 }) => {
   const [open, setOpenValue] = useState(false);
   const [generated, setGenerated] = useState([]);
@@ -40,10 +41,16 @@ const ModalGenRandom = ({
         <Button primary onClick={setOpen}>Generate group</Button>
       )}
       <Modal open={open} centered={false} onClose={setClose}>
-        <Modal.Header>Generate competitors for group</Modal.Header>
+        <Modal.Header>
+          {headerContent ? (
+            <>{headerContent}</>
+          ) : (
+            <>Generate competitors for group</>
+          )}
+        </Modal.Header>
         <Modal.Content>
           <p>
-            Use this form to generate a random population for the group.
+            Use this form to generate a population for the group.
             Each number represents the average time of one competitor,
             therefore if you want 20 competitors in the group you need to
             generate 20 numbers.
