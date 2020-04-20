@@ -1,27 +1,27 @@
 {
   "files": {
-    "main.css": "/schedule-checker/static/css/main.4f744e39.chunk.css",
-    "main.js": "/schedule-checker/static/js/main.0ea9d714.chunk.js",
-    "main.js.map": "/schedule-checker/static/js/main.0ea9d714.chunk.js.map",
+    "main.css": "/schedule-checker/static/css/main.e7001d36.chunk.css",
+    "main.js": "/schedule-checker/static/js/main.40977d14.chunk.js",
+    "main.js.map": "/schedule-checker/static/js/main.40977d14.chunk.js.map",
     "runtime-main.js": "/schedule-checker/static/js/runtime-main.6c3697af.js",
     "runtime-main.js.map": "/schedule-checker/static/js/runtime-main.6c3697af.js.map",
     "static/css/2.b91fe813.chunk.css": "/schedule-checker/static/css/2.b91fe813.chunk.css",
-    "static/js/2.2e704414.chunk.js": "/schedule-checker/static/js/2.2e704414.chunk.js",
-    "static/js/2.2e704414.chunk.js.map": "/schedule-checker/static/js/2.2e704414.chunk.js.map",
+    "static/js/2.7e14b460.chunk.js": "/schedule-checker/static/js/2.7e14b460.chunk.js",
+    "static/js/2.7e14b460.chunk.js.map": "/schedule-checker/static/js/2.7e14b460.chunk.js.map",
     "group-simulator.wasm": "/schedule-checker/group-simulator.79529a4c.wasm",
     "index.html": "/schedule-checker/index.html",
-    "precache-manifest.44f0bb8aec563625d035d5ee7a3d8eea.js": "/schedule-checker/precache-manifest.44f0bb8aec563625d035d5ee7a3d8eea.js",
+    "precache-manifest.81f773ce9db8cae958c033062c9570d8.js": "/schedule-checker/precache-manifest.81f773ce9db8cae958c033062c9570d8.js",
     "service-worker.js": "/schedule-checker/service-worker.js",
     "static/css/2.b91fe813.chunk.css.map": "/schedule-checker/static/css/2.b91fe813.chunk.css.map",
-    "static/css/main.4f744e39.chunk.css.map": "/schedule-checker/static/css/main.4f744e39.chunk.css.map",
-    "static/js/2.2e704414.chunk.js.LICENSE.txt": "/schedule-checker/static/js/2.2e704414.chunk.js.LICENSE.txt",
+    "static/css/main.e7001d36.chunk.css.map": "/schedule-checker/static/css/main.e7001d36.chunk.css.map",
+    "static/js/2.7e14b460.chunk.js.LICENSE.txt": "/schedule-checker/static/js/2.7e14b460.chunk.js.LICENSE.txt",
     "static/media/semantic.css": "/schedule-checker/static/media/outline-icons.ece54318.ttf"
   },
   "entrypoints": [
     "static/js/runtime-main.6c3697af.js",
     "static/css/2.b91fe813.chunk.css",
-    "static/js/2.2e704414.chunk.js",
-    "static/css/main.4f744e39.chunk.css",
-    "static/js/main.0ea9d714.chunk.js"
+    "static/js/2.7e14b460.chunk.js",
+    "static/css/main.e7001d36.chunk.css",
+    "static/js/main.40977d14.chunk.js"
   ]
 }
