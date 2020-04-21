@@ -130,7 +130,7 @@ function App() {
             userLoading={userLoading}
           />
           {isStaging() && (
-            <Message size="small">
+            <Message size="small" color="pink">
               You&apos;re not currently using the WCA&apos;s production data.
             </Message>
           )}

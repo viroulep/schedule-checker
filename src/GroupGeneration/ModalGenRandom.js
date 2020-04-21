@@ -5,6 +5,7 @@ import {
 import _ from 'lodash';
 
 import { setInt } from '../utils';
+import GenericPicker from '../Pickers/Generic';
 
 const generateRandomArray = (min, max, size) => Array.from(Array(size))
   .map(() => Math.floor(Math.random() * (max - min + 1)) + min);
@@ -85,16 +86,58 @@ const FormAddRandom = ({
   )
 };
 
+const amountOptions = Array.from(Array(10).keys()).map((n) => ({
+  text: n + 1,
+  key: n + 1,
+  value: n + 1,
+}));
+
 const FormAddOne = ({
   generated,
   setGenerated,
 }) => {
+  const [time, setTime] = useState(_.max(generated) || DEFAULT_MAX);
+  const [amount, setAmount] = useState(1);
+  const generateAndAppend = () => setGenerated([
+    ...generated,
+    ...Array.from(Array(amount)).map(() => time),
+  ]);
   return (
     <>
       <Header as="h4" textAlign="center">
         Add specific time(s)
       </Header>
-      <div>This is a work in progress.</div>
+      <p>
+        You can add a specific time one or more time by using the form below.
+      </p>
+      <Form className="mb-2">
+        <Form.Input
+          inline
+          min={1}
+          type="number"
+          label="Time"
+          value={time}
+          onChange={(e) => setInt(e, setTime, time)}
+        />
+      </Form>
+      <div className="mb-2">
+        I want to add this value
+        {' '}
+        <GenericPicker
+          inline
+          scrolling
+          val={amount}
+          setVal={setAmount}
+          options={amountOptions}
+        />
+        {' '}
+        times.
+      </div>
+      <Button
+        color="violet"
+        content="Append"
+        onClick={generateAndAppend}
+      />
     </>
   );
 };
