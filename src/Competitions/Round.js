@@ -16,10 +16,14 @@ const Round = ({
 }) => {
   const { activityCode, name, childActivities } = activity;
   const { eventId } = parseActivityCode(activityCode);
-  const [inaccurate, setInaccurate] = useState(undefined);
+  const [accuracyArray, setAccuracyArray] = useState(
+    childActivities.map(() => undefined),
+  );
   let color = 'black';
-  if (inaccurate !== undefined) {
-    color = inaccurate ? 'orange' : 'green';
+  if (accuracyArray.every((a) => a)) {
+    color = 'green';
+  } else if (accuracyArray.some((a) => a !== undefined)) {
+    color = 'orange';
   }
 
   return (
@@ -34,13 +38,14 @@ const Round = ({
           </Header.Content>
         </Header>
         <List relaxed>
-          {childActivities.map((ca) => (
+          {childActivities.map((ca, index) => (
             <Group
+              index={index}
               key={ca.id}
               activity={ca}
               color={color}
-              inaccurate={inaccurate}
-              setInaccurate={setInaccurate}
+              accuracyArray={accuracyArray}
+              setAccuracyArray={setAccuracyArray}
               comp={comp}
               pbMap={pbMap}
               groupsById={groupsById}

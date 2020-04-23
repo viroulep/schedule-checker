@@ -192,14 +192,14 @@ const ModalGenRandom = ({
             </code>
           </p>
           <Segment basic>
-          <Grid columns={2} relaxed="very" className="mb-2" >
-            <Grid.Column>
-              <FormAddRandom generated={generated} setGenerated={setGenerated} />
-            </Grid.Column>
-            <Grid.Column>
-              <FormAddOne generated={generated} setGenerated={setGenerated} />
-            </Grid.Column>
-          </Grid>
+            <Grid columns={2} relaxed="very" className="mb-2">
+              <Grid.Column>
+                <FormAddRandom generated={generated} setGenerated={setGenerated} />
+              </Grid.Column>
+              <Grid.Column>
+                <FormAddOne generated={generated} setGenerated={setGenerated} />
+              </Grid.Column>
+            </Grid>
             <Divider vertical>Or</Divider>
           </Segment>
           <Button

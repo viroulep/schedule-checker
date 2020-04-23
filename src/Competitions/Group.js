@@ -3,6 +3,7 @@ import {
   Button, Divider, List, Header,
 } from 'semantic-ui-react';
 import { asVector } from '@viroulep/group-simulator';
+import _ from 'lodash';
 
 import { parseActivityCode } from '../wca/wcif';
 import { timeToString } from '../utils';
@@ -43,12 +44,13 @@ const openGroupButton = (size) => ({ onClick }) => (
 
 
 const Group = ({
+  index,
   simulator,
   activity,
   pbMap,
   groupsById,
-  inaccurate,
-  setInaccurate,
+  accuracyArray,
+  setAccuracyArray,
 }) => {
   const [error, setError] = useState(undefined);
   const [simulated, setSimulated] = useState(undefined);
@@ -81,9 +83,15 @@ const Group = ({
     }
     const { startTime, endTime } = activity;
     const estimate = secondsForRange(startTime, endTime);
-    const accuracy = Math.abs(Math.round(((simulated - estimate) / estimate) * 100));
-    setInaccurate(inaccurate || accuracy >= 10);
-  }, [inaccurate, setInaccurate, simulated, activity]);
+    const diff = Math.abs(Math.round(((simulated - estimate) / estimate) * 100));
+    const newAcc = [
+      ...accuracyArray,
+    ];
+    newAcc[index] = diff < 10;
+    if (!_.isEqual(accuracyArray, newAcc)) {
+      setAccuracyArray(newAcc);
+    }
+  }, [index, accuracyArray, setAccuracyArray, simulated, activity]);
 
   const {
     id, name, activityCode, startTime, endTime,
