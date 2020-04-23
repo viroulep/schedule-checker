@@ -1,12 +1,12 @@
 import React, {
-  Fragment, useCallback, useState, useEffect,
+  Fragment, useState, useEffect,
 } from 'react';
 import {
   Divider, Grid, Header, Segment, Checkbox,
 } from 'semantic-ui-react';
 import _ from 'lodash';
 
-import { getCompetitionWcif } from '../wca/api';
+import { competitionWcifUrl } from '../wca/routes';
 import { parseActivityCode } from '../wca/wcif';
 import { usePersistence } from '../wca/persistence';
 import SyncIcon from './SyncIcon';
@@ -113,15 +113,11 @@ const Competition = ({
   competitionId,
   simulator,
 }) => {
-  const fetchData = useCallback(
-    () => getCompetitionWcif(competitionId),
-    [competitionId],
-  );
   const {
     loadedData, loading, error, sync,
   } = usePersistence(
     `competitions.${competitionId}`,
-    fetchData,
+    competitionWcifUrl(competitionId),
   );
   const { data, lastFetched } = loadedData;
   return (

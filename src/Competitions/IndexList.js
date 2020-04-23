@@ -5,7 +5,7 @@ import {
 } from 'semantic-ui-react';
 import cn from 'classnames';
 
-import { getManageableCompetitions } from '../wca/api';
+import { competitionsUrl } from '../wca/routes';
 import { usePersistence } from '../wca/persistence';
 import SyncIcon from './SyncIcon';
 import LoadingError from '../UtilsComponents/LoadingError';
@@ -30,10 +30,18 @@ const Competitions = ({
   </Menu>
 );
 
+const manageByMeParams = new URLSearchParams({
+  managed_by_me: true,
+  // Last 12 months: months * days * hours * minByHour * secByMin * milli
+  start: new Date(Date.now() - 12 * 28 * 24 * 60 * 60 * 1000).toISOString(),
+});
+
 const IndexList = () => {
   const {
     loadedData, loading, error, sync,
-  } = usePersistence('competitions.index', getManageableCompetitions);
+  } = usePersistence(
+    'competitions.index', competitionsUrl(`?${manageByMeParams.toString()}`)
+  );
   const { data, lastFetched } = loadedData;
   return (
     <>

@@ -1,8 +1,6 @@
 import ls from 'local-storage';
 import {
   selfUrl,
-  competitionWcifUrl,
-  competitionsUrl,
   getOauthClientId,
   oauthUrl,
   setStaging,
@@ -25,7 +23,7 @@ export const setRemoteIfNeeded = () => {
   }
 };
 
-const wcaApiFetch = (url, fetchOptions = {}) => fetch(url,
+export const wcaApiFetch = (url, fetchOptions = {}) => fetch(url,
   {
     ...fetchOptions,
     headers: new Headers({
@@ -40,17 +38,6 @@ const wcaApiFetch = (url, fetchOptions = {}) => fetch(url,
   .then((response) => response.json());
 
 export const getMe = () => wcaApiFetch(selfUrl());
-export const getCompetitionWcif = (id) => wcaApiFetch(competitionWcifUrl(id));
-
-export const getManageableCompetitions = () => {
-  // Last 12 months: months * days * hours * minByHour * secByMin * milli
-  const oneYearAgo = new Date(Date.now() - 12 * 28 * 24 * 60 * 60 * 1000);
-  const params = new URLSearchParams({
-    managed_by_me: true,
-    start: oneYearAgo.toISOString(),
-  });
-  return wcaApiFetch(competitionsUrl(`?${params.toString()}`));
-};
 
 // Call this upon loading to check the token in local storage is still valid!
 // TODO: store user, only re-login if token is expired!

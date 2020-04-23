@@ -1,13 +1,15 @@
 import { useState, useEffect, useCallback } from 'react';
 import ls from 'local-storage';
 
+import { wcaApiFetch } from '../wca/api';
+
 const defaultData = {
   data: null,
   lastFetched: null,
 };
 
 /* eslint-disable import/prefer-default-export */
-export const usePersistence = (kind, fetcher) => {
+export const usePersistence = (kind, url) => {
   const [loadedData, setData] = useState({
     ...defaultData,
   });
@@ -17,7 +19,7 @@ export const usePersistence = (kind, fetcher) => {
   const sync = useCallback(() => {
     setLoading(true);
     setError(null);
-    fetcher().then((loaded) => {
+    wcaApiFetch(url).then((loaded) => {
       const data = {
         data: loaded,
         lastFetched: Date.now(),
@@ -27,7 +29,7 @@ export const usePersistence = (kind, fetcher) => {
     }).catch((err) => {
       setError(err.message);
     }).finally(() => setLoading(false));
-  }, [kind, fetcher, setData, setError]);
+  }, [kind, url, setData, setError]);
 
   useEffect(() => {
     const storedData = ls(kind) || {
