@@ -1,11 +1,61 @@
 import { useState, useEffect, useCallback } from 'react';
 import ls from 'local-storage';
 
-import { wcaApiFetch } from '../wca/api';
+import { setOauthToken, wcaApiFetch } from './api';
+import { isStaging } from './routes';
 
 const defaultData = {
   data: null,
   lastFetched: null,
+};
+
+export const clearForNewUser = () => {
+  const staging = ls('staging');
+  const token = ls('token');
+  const currentUser = ls('currentUser');
+  ls.clear();
+  ls('currentUser', currentUser);
+  ls('token', token);
+  ls('staging', staging);
+};
+
+export const getOauthTokenIfAny = () => {
+  // Try getting it from the url, if we're redirected from the WCA website.
+  const hash = window.location.hash.replace(/^#/, '');
+  const hashParams = new URLSearchParams(hash);
+  if (hashParams.has('access_token')) {
+    window.location.hash = '';
+    setOauthToken(hashParams.get('access_token'));
+    const stored = ls('currentUser');
+    if (stored) {
+      // We had a user!
+      // It may be us, so just reset the lastFetched date to force a sync.
+      stored.lastFetched = null;
+      ls('currentUser', stored);
+    }
+  }
+};
+
+export const setStaging = () => {
+  ls.clear();
+  ls('staging', true);
+  document.location.reload();
+};
+
+export const setProd = () => {
+  ls.clear();
+  ls('staging', false);
+  document.location.reload();
+};
+
+export const setRemoteIfNeeded = () => {
+  const params = new URLSearchParams(window.location.search);
+  if (params.has('staging') && !isStaging()) {
+    setStaging();
+  }
+  if (params.has('prod') && isStaging()) {
+    setProd();
+  }
 };
 
 /* eslint-disable import/prefer-default-export */

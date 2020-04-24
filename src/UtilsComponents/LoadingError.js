@@ -1,5 +1,6 @@
 import React from 'react';
-import { Message } from 'semantic-ui-react';
+import { Button, Message } from 'semantic-ui-react';
+import { signIn } from '../wca/api';
 
 const LoadingError = ({ error }) => (
   <Message negative>
@@ -7,8 +8,11 @@ const LoadingError = ({ error }) => (
     <pre>
       {error}
     </pre>
-    Your authentification token may have expired, you may try to sign out then
-    back in, or to use the &quot;Clear locally stored data&quot; option in the menu.
+    Your authentification token may have expired, you can try to
+    {' '}
+    <Button primary compact size="tiny" onClick={signIn} content="sign in" />
+    {' '}
+    again.
     <br />
     If the issue persists, it most likely means the WCA website is unreachable.
     or the WCA website is unreachable.

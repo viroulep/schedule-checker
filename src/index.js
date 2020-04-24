@@ -2,17 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import { getOauthTokenIfAny } from './wca/persistence';
 import * as serviceWorker from './serviceWorker';
 import 'fomantic-ui-css/semantic.css';
 
-// NOTE:
-// import { Link } from 'react-router-dom'
-// import { Button } from 'semantic-ui-react'
-
-// // 💡 `to` prop is not handled in `Button` and will be passed to `Link` component
-// <Button as={Link} to="/home">
-// To homepage
-// </Button>
+getOauthTokenIfAny();
 
 ReactDOM.render(
   <App />,

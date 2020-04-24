@@ -4,6 +4,7 @@ import {
 } from 'semantic-ui-react';
 import { getSimu } from '@viroulep/group-simulator';
 import { Router } from '@reach/router';
+import ls from 'local-storage';
 
 import './App.scss';
 import Navigation from './Navigation/Navigation';
@@ -11,11 +12,11 @@ import Settings from './Settings/Settings';
 import QuickRunPage from './Simulation/QuickRun';
 import { loadStoredConfig } from './utils';
 import {
-  setOauthToken,
-  loginUser,
+  usePersistence,
+  clearForNewUser,
   setRemoteIfNeeded,
-} from './wca/api';
-import { isStaging } from './wca/routes';
+} from './wca/persistence';
+import { isStaging, selfUrl } from './wca/routes';
 import CompetitionsList from './Competitions/IndexList';
 import Competition from './Competitions/Show';
 
@@ -87,47 +88,52 @@ const Home = () => (
 
 const NotFound = () => <p>Oups, it&apos;s a 404</p>;
 
-const getOauthTokenIfAny = () => {
-  const hash = window.location.hash.replace(/^#/, '');
-  const hashParams = new URLSearchParams(hash);
-  if (hashParams.has('access_token')) {
-    window.location.hash = '';
-    setOauthToken(hashParams.get('access_token'));
-  }
-};
-
 const Competitions = ({ children }) => <>{children}</>;
 
 function App() {
   const [simulator, setSimulator] = useState(undefined);
-  const [loading, setLoading] = useState(true);
-  const [userLoading, setUserLoading] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null);
+  const [simuLoading, setSimuLoading] = useState(true);
+
+  // This is important in case we happen signing in someone new.
+  const storedUser = ls('currentUser');
+  const storedData = storedUser ? storedUser.data : null;
+  const storedMe = storedData ? storedData.me : null;
+
+  const { loadedData, loading } = usePersistence(
+    'currentUser',
+    selfUrl(),
+  );
+
+  // This holds the actual currentUser data
+  const { data } = loadedData;
+  const currentUser = data ? data.me : null;
+
+  if (storedUser && currentUser && (storedMe.id !== currentUser.id)) {
+    clearForNewUser();
+  }
 
   const loadWasm = async () => {
-    const wasm = getSimu(() => { setSimulator(wasm); setLoading(false) });
+    const wasm = getSimu(() => { setSimulator(wasm); setSimuLoading(false) });
   };
 
   // Pass '[]' as a dependency, so that it's ran just once.
   useEffect(() => {
     loadWasm();
     setRemoteIfNeeded();
-    getOauthTokenIfAny();
-    loginUser(setCurrentUser, setUserLoading);
     // Register a timeout on the loading process
-    setTimeout(() => setLoading(false), 3000);
+    setTimeout(() => setSimuLoading(false), 3000);
   }, []);
 
   useEffect(() => { loadStoredConfig(simulator); }, [simulator]);
 
   return (
     <Container>
-      <LoadingWasm simulator={simulator} loading={loading} />
+      <LoadingWasm simulator={simulator} loading={simuLoading} />
       {simulator && (
         <>
           <Navigation
             user={currentUser}
-            userLoading={userLoading}
+            userLoading={loading}
           />
           {isStaging() && (
             <Message size="small" color="pink">
@@ -138,7 +144,7 @@ function App() {
             <Home path="/" />
             <Settings simulator={simulator} path="settings/*" />
             <QuickRunPage simulator={simulator} path="/quick-simu" />
-            {currentUser && (
+            {!loading && currentUser && (
               <Competitions path="competitions">
                 <CompetitionsList path="/" />
                 <Competition path=":competitionId" simulator={simulator} />

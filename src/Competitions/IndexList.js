@@ -40,7 +40,7 @@ const IndexList = () => {
   const {
     loadedData, loading, error, sync,
   } = usePersistence(
-    'competitions.index', competitionsUrl(`?${manageByMeParams.toString()}`)
+    'competitions.index', competitionsUrl(`?${manageByMeParams.toString()}`),
   );
   const { data, lastFetched } = loadedData;
   return (
