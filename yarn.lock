@@ -1577,10 +1577,10 @@
     semver "^6.3.0"
     tsutils "^3.17.1"
 
-"@viroulep/group-simulator@^1.0.0-beta.6":
-  version "1.0.0-beta.8"
-  resolved "https://registry.yarnpkg.com/@viroulep/group-simulator/-/group-simulator-1.0.0-beta.8.tgz#6a1502b949a7091e435b5b8629a44a143c389f19"
-  integrity sha512-cto+JT/i3XrH4vXKk+qmEmOp+yhFF3Ev1zXTgsw70MQbSqclaoa+QVjAVtLl89cmZNu5AD9wmNnY3ORpAmQlGQ==
+"@viroulep/group-simulator@^1.0.0-beta.9":
+  version "1.0.0-beta.9"
+  resolved "https://registry.yarnpkg.com/@viroulep/group-simulator/-/group-simulator-1.0.0-beta.9.tgz#23b2d2c0e51deaeb8c0de0a1b8b1be9200131022"
+  integrity sha512-DMzu3OvONN+WHBBp3xpcYr8mgQ/uJwT/8BzvVPDizQnsoXO/edNxBQwyGd4r33ad/s78v8bV/5PZBqmIENzgLQ==
 
 "@webassemblyjs/ast@1.8.5":
   version "1.8.5"

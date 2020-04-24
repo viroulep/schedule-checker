@@ -1,4 +1,4 @@
-import events from '../data/events';
+import Events from '../data/events';
 
 export const parseActivityCode = (activityCode) => {
   const [, e, r, g, a, o] = activityCode.match(
@@ -18,9 +18,18 @@ export const activityCodeToName = (activityCode) => {
     eventId, roundNumber, groupNumber, attemptNumber,
   } = parseActivityCode(activityCode);
   return [
-    eventId && events.byId[eventId].name,
+    eventId && Events.byId[eventId].name,
     roundNumber && `Round ${roundNumber}`,
     groupNumber && `Group ${groupNumber}`,
     attemptNumber && `Attempt ${attemptNumber}`,
   ].filter((x) => x).join(', ');
+};
+
+export const getRoundData = (events, activityCode) => {
+  // The activity code may contain a group or attempt, so we want to extract only
+  // the relevant part.
+  const { eventId, roundNumber } = parseActivityCode(activityCode);
+  const roundId = `${eventId}-r${roundNumber}`;
+  const event = events.find((e) => e.id === eventId);
+  return event ? event.rounds.find((r) => r.id === roundId) : null;
 };

@@ -7,13 +7,13 @@ import {
 import _ from 'lodash';
 
 import { competitionWcifUrl } from '../wca/routes';
-import { parseActivityCode } from '../wca/wcif';
+import { parseActivityCode, getRoundData } from '../wca/wcif';
 import { usePersistence } from '../wca/persistence';
 import SyncIcon from './SyncIcon';
 import LoadingError from '../UtilsComponents/LoadingError';
 import LoadingPlaceholder from '../UtilsComponents/LoadingPlaceholder';
 import Round from './Round';
-import events from '../data/events';
+import Events from '../data/events';
 
 const buildIndex = (wcif, setPbMap, setGroupMap) => {
   const pbMap = {
@@ -57,7 +57,7 @@ const getAllActivities = (schedule, onlySimulated) => {
   }
   const sortedActivities = _.sortBy(room.activities.filter(
     (a) => !onlySimulated
-    || events.simulatedId.includes(parseActivityCode(a.activityCode).eventId),
+    || Events.simulatedId.includes(parseActivityCode(a.activityCode).eventId),
   ), ['startTime']);
   return _.groupBy(sortedActivities, (a) => formatDate(new Date(a.startTime)));
 };
@@ -66,7 +66,7 @@ const CompetitionInfo = ({
   simulator,
   comp,
 }) => {
-  const { schedule } = comp;
+  const { schedule, events } = comp;
   const [pbMap, setPbMap] = useState({});
   const [groupsById, setGroups] = useState({});
   const [onlySimulated, setOnlySimulated] = useState(true);
@@ -98,6 +98,7 @@ const CompetitionInfo = ({
                 activity={activity}
                 comp={comp}
                 pbMap={pbMap}
+                roundWcif={getRoundData(events, activity.activityCode)}
                 groupsById={groupsById}
                 simulator={simulator}
               />

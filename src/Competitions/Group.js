@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   Button, Divider, List, Header,
 } from 'semantic-ui-react';
-import { asVector } from '@viroulep/group-simulator';
+import { asVector, asMap } from '@viroulep/group-simulator';
 import _ from 'lodash';
 
 import { parseActivityCode } from '../wca/wcif';
@@ -51,6 +51,7 @@ const Group = ({
   groupsById,
   accuracyArray,
   setAccuracyArray,
+  roundWcif,
 }) => {
   const [error, setError] = useState(undefined);
   const [simulated, setSimulated] = useState(undefined);
@@ -64,10 +65,24 @@ const Group = ({
     const { eventId } = parseActivityCode(activityCode);
     const timesVec = asVector(simulator.VectorTime, times);
     // We'll just use the default config with no override!
-    const localOverride = new simulator.MapStringInt();
+    const { cutoff, timeLimit } = roundWcif;
+    const configOverride = {};
+    if (timeLimit) {
+      // NOTE: cumulative time limit across events are not supported
+      // (and not planed to be).
+      const { centiseconds } = timeLimit;
+      configOverride.time_limit = Math.floor(centiseconds / 100);
+    }
+    if (cutoff) {
+      // Because we only simulate timed event
+      const { attemptResult } = cutoff;
+      configOverride.cutoff = Math.floor(attemptResult / 100);
+    }
+
     const { Err, Value } = simulator.simuGroup(
-      eventId, timesVec, localOverride, 'Runners',
+      eventId, timesVec, asMap(simulator.MapStringInt, configOverride), 'Runners',
     );
+
     if (Err !== simulator.ErrorKind.SUCCESS) {
       setError(
         `An error occurred during the simulation: ${simulator.errorMessage(Err)}`,
@@ -75,7 +90,7 @@ const Group = ({
     } else {
       setSimulated(Value);
     }
-  }, [times, simulator, activity]);
+  }, [times, simulator, activity, roundWcif]);
 
   useEffect(() => {
     if (simulated === undefined) {

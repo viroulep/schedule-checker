@@ -13,6 +13,7 @@ const Round = ({
   activity,
   pbMap,
   groupsById,
+  roundWcif,
 }) => {
   const { activityCode, name, childActivities } = activity;
   const { eventId } = parseActivityCode(activityCode);
@@ -50,6 +51,7 @@ const Round = ({
               pbMap={pbMap}
               groupsById={groupsById}
               simulator={simulator}
+              roundWcif={roundWcif}
             />
           ))}
         </List>
