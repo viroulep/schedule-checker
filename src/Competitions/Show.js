@@ -2,7 +2,7 @@ import React, {
   Fragment, useState, useEffect,
 } from 'react';
 import {
-  Divider, Grid, Header, Segment, Checkbox,
+  Divider, Dropdown, Grid, Header, Segment, Checkbox,
 } from 'semantic-ui-react';
 import _ from 'lodash';
 
@@ -44,14 +44,12 @@ const buildIndex = (wcif, setPbMap, setGroupMap) => {
 
 const formatDate = (d) => `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
 
-const getAllActivities = (schedule, onlySimulated) => {
-  // Return all activities for first venue/first room
-  // TODO: extend to take for a given room
-  const venue = schedule.venues[0];
-  if (!venue) {
-    return [];
-  }
-  const room = venue.rooms[0];
+const getAllActivities = (schedule, roomId, onlySimulated) => {
+  // Return all activities for given room
+  const room = _.flatMap(
+    schedule.venues,
+    (venue) => venue.rooms,
+  ).find((r) => r.id === roomId);
   if (!room) {
     return [];
   }
@@ -70,13 +68,44 @@ const CompetitionInfo = ({
   const [pbMap, setPbMap] = useState({});
   const [groupsById, setGroups] = useState({});
   const [onlySimulated, setOnlySimulated] = useState(true);
-  const allActivities = getAllActivities(schedule, onlySimulated);
-  useEffect(() => buildIndex(compWcif, setPbMap, setGroups), [compWcif]);
+
+  const allRoomsOptions = _.flatMap(
+    schedule.venues,
+    (venue) => venue.rooms.map((r) => ({
+      key: r.id,
+      value: r.id,
+      text: `${r.name} in ${venue.name}`,
+    })),
+  )
+
+  // Selected room
+  const [room, setRoom] = useState(null);
+  const handleChangeRoom = (e, { value }) => setRoom(value);
+
+  const allActivities = getAllActivities(schedule, room, onlySimulated);
+
+  useEffect(() => {
+    buildIndex(compWcif, setPbMap, setGroups)
+    const defaultVenue = compWcif.schedule.venues[0];
+    if (defaultVenue) {
+      const defaultRoom = defaultVenue.rooms[0];
+      if (defaultRoom) {
+        setRoom(defaultRoom.id);
+      }
+    }
+  }, [compWcif]);
 
   return (
     <>
+      <Dropdown
+        onChange={handleChangeRoom}
+        options={allRoomsOptions}
+        value={room}
+        selection
+        className="mb-2"
+      />
       <p>
-        You can review the schedule below.
+        You can review the schedule for that room below.
       </p>
       <Checkbox
         toggle
