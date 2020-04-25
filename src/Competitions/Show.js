@@ -7,7 +7,7 @@ import {
 import _ from 'lodash';
 
 import { competitionWcifUrl } from '../wca/routes';
-import { parseActivityCode, getRoundData } from '../wca/wcif';
+import { parseActivityCode } from '../wca/wcif';
 import { usePersistence } from '../wca/persistence';
 import SyncIcon from './SyncIcon';
 import LoadingError from '../UtilsComponents/LoadingError';
@@ -64,14 +64,14 @@ const getAllActivities = (schedule, onlySimulated) => {
 
 const CompetitionInfo = ({
   simulator,
-  comp,
+  compWcif,
 }) => {
-  const { schedule, events } = comp;
+  const { schedule } = compWcif;
   const [pbMap, setPbMap] = useState({});
   const [groupsById, setGroups] = useState({});
   const [onlySimulated, setOnlySimulated] = useState(true);
   const allActivities = getAllActivities(schedule, onlySimulated);
-  useEffect(() => buildIndex(comp, setPbMap, setGroups), [comp]);
+  useEffect(() => buildIndex(compWcif, setPbMap, setGroups), [compWcif]);
 
   return (
     <>
@@ -96,9 +96,8 @@ const CompetitionInfo = ({
               <Round
                 key={activity.id}
                 activity={activity}
-                comp={comp}
+                compWcif={compWcif}
                 pbMap={pbMap}
-                roundWcif={getRoundData(events, activity.activityCode)}
                 groupsById={groupsById}
                 simulator={simulator}
               />
@@ -144,7 +143,7 @@ const Competition = ({
         </Segment>
       )}
       {!loading && data && (
-        <CompetitionInfo comp={data} simulator={simulator} />
+        <CompetitionInfo compWcif={data} simulator={simulator} />
       )}
     </>
   );

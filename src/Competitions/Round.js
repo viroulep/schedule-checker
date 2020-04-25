@@ -9,11 +9,10 @@ import EventIcon from '../UtilsComponents/EventIcon';
 
 const Round = ({
   simulator,
-  comp,
+  compWcif,
   activity,
   pbMap,
   groupsById,
-  roundWcif,
 }) => {
   const { activityCode, name, childActivities } = activity;
   const { eventId } = parseActivityCode(activityCode);
@@ -47,11 +46,10 @@ const Round = ({
               color={color}
               accuracyArray={accuracyArray}
               setAccuracyArray={setAccuracyArray}
-              comp={comp}
+              compWcif={compWcif}
               pbMap={pbMap}
               groupsById={groupsById}
               simulator={simulator}
-              roundWcif={roundWcif}
             />
           ))}
         </List>
