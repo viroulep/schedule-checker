@@ -8,9 +8,10 @@ import {
   Segment,
   Message,
   Menu,
+  Popup,
 } from 'semantic-ui-react';
 import _ from 'lodash';
-import { asMap } from '@viroulep/group-simulator';
+import { asMap, SettingsDescription } from '@viroulep/group-simulator';
 
 import {
   isPartiallyActive, isExactlyActive,
@@ -42,6 +43,7 @@ const DropdownMenu = ({
   */
 
 const SettingsPanel = ({
+  options,
   props,
   setProps,
 }) => {
@@ -57,14 +59,22 @@ const SettingsPanel = ({
   return (
     <Form className="settings-form">
       <Grid doubling textAlign="right" columns={3}>
-        {Object.entries(props).map(([k, v]) => (
+        {Object.entries(options).map(([k, data]) => (
           <Grid.Column key={k}>
             <Form.Input
               inline
               min={0}
               type="number"
-              label={k}
-              value={v}
+              label={(
+                <Popup
+                  /* eslint-disable-next-line */
+                  trigger={<label>{data.text}</label>}
+                  position="left center"
+                >
+                  {data.desc}
+                </Popup>
+              )}
+              value={props[k] || 0}
               onChange={(e) => updateInProps(k, e.target.value)}
             />
           </Grid.Column>
@@ -148,18 +158,21 @@ const Settings = ({
             path="/"
             default
             simulator={simulator}
+            options={SettingsDescription.setup}
             props={setup}
             setProps={setSetup}
           />
           <SettingsPanel
             path="/model"
             simulator={simulator}
+            options={SettingsDescription.model}
             props={model}
             setProps={setModel}
           />
           <SettingsPanel
             path="/scrambling"
             simulator={simulator}
+            options={SettingsDescription.scrambling}
             props={scrambling}
             setProps={setScrambling}
           />

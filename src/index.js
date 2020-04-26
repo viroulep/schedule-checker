@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './App';
 import { getOauthTokenIfAny } from './wca/persistence';
 import * as serviceWorker from './serviceWorker';
