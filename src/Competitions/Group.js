@@ -152,7 +152,7 @@ const updateAccuracyArray = (
 };
 
 const computeSimulatedTime = (
-  times, simulator, activity, compWcif, setSimulated, setError,
+  times, simulator, activity, compWcif, setSimulated, setError, selectedModel,
 ) => {
   if (times.length === 0) {
     setSimulated(undefined);
@@ -177,9 +177,8 @@ const computeSimulatedTime = (
     configOverride.cutoff = Math.floor(attemptResult / 100);
   }
 
-  // FIXME: parametrize that 'Runners' param!
   const { Err, Value } = simulator.simuGroup(
-    eventId, timesVec, asMap(simulator.MapStringInt, configOverride), 'Runners',
+    eventId, timesVec, asMap(simulator.MapStringInt, configOverride), selectedModel,
   );
 
   if (Err !== simulator.ErrorKind.SUCCESS) {
@@ -195,6 +194,7 @@ const computeSimulatedTime = (
 const Group = ({
   index,
   simulator,
+  selectedModel,
   activity,
   pbMap,
   groupsById,
@@ -211,9 +211,9 @@ const Group = ({
 
   useEffect(() => {
     computeSimulatedTime(
-      times, simulator, activity, compWcif, setSimulated, setError,
+      times, simulator, activity, compWcif, setSimulated, setError, selectedModel,
     );
-  }, [times, simulator, activity, compWcif, setSimulated, setError]);
+  }, [times, simulator, activity, compWcif, setSimulated, setError, selectedModel]);
 
   useEffect(() => {
     updateAccuracyArray(

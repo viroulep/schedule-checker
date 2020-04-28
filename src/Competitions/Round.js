@@ -9,6 +9,7 @@ import EventIcon from '../UtilsComponents/EventIcon';
 
 const Round = ({
   simulator,
+  selectedModel,
   compWcif,
   activity,
   pbMap,
@@ -50,6 +51,7 @@ const Round = ({
               pbMap={pbMap}
               groupsById={groupsById}
               simulator={simulator}
+              selectedModel={selectedModel}
             />
           ))}
         </List>

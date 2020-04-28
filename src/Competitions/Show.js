@@ -2,16 +2,20 @@ import React, {
   Fragment, useState, useEffect,
 } from 'react';
 import {
-  Divider, Dropdown, Grid, Header, Segment, Checkbox,
+  Divider, Dropdown, Form, Grid, Header, Segment, Checkbox,
 } from 'semantic-ui-react';
 import _ from 'lodash';
+import { SettingsDescription } from '@viroulep/group-simulator';
 
 import { competitionWcifUrl } from '../wca/routes';
 import { parseActivityCode } from '../wca/wcif';
 import { usePersistence } from '../wca/persistence';
+import { defaultModel } from '../data/simu';
+import { loadStoredConfig } from '../utils';
 import SyncIcon from './SyncIcon';
 import LoadingError from '../UtilsComponents/LoadingError';
 import LoadingPlaceholder from '../UtilsComponents/LoadingPlaceholder';
+import ModelPicker from '../Pickers/Model';
 import Round from './Round';
 import Events from '../data/events';
 
@@ -60,6 +64,53 @@ const getAllActivities = (schedule, roomId, onlySimulated) => {
   return _.groupBy(sortedActivities, (a) => formatDate(new Date(a.startTime)));
 };
 
+const settingsToDisplay = [
+  'judges', 'scramblers', 'runners', 'extra_rate', 'miscramble_rate',
+];
+
+const SettingsInfo = ({
+  simulator,
+  selectedModel,
+  setSelectedModel,
+}) => {
+  const { mapSetup } = loadStoredConfig(simulator);
+  /* eslint-disable jsx-a11y/label-has-associated-control */
+  return (
+    <Segment color="teal">
+      <Header as="h2">
+        Settings
+      </Header>
+      <p>
+        You can adjust them in the &quot;settings&quot; section,
+        except for the system used that you can select below.
+      </p>
+      <Form className="mb-2">
+        <Grid columns={3}>
+          <Grid.Row>
+            {settingsToDisplay.map((s) => (
+              <Grid.Column key={s}>
+                <Form.Field inline>
+                  <label>{SettingsDescription.setup[s].text}</label>
+                  :
+                  {' '}
+                  {mapSetup[s]}
+                </Form.Field>
+              </Grid.Column>
+            ))}
+          </Grid.Row>
+        </Grid>
+      </Form>
+      <p>
+        I want to use the
+        {' '}
+        <ModelPicker model={selectedModel} setModel={setSelectedModel} inline />
+        {' '}
+        system.
+      </p>
+    </Segment>
+  );
+};
+
 const CompetitionInfo = ({
   simulator,
   compWcif,
@@ -68,6 +119,7 @@ const CompetitionInfo = ({
   const [pbMap, setPbMap] = useState({});
   const [groupsById, setGroups] = useState({});
   const [onlySimulated, setOnlySimulated] = useState(true);
+  const [selectedModel, setSelectedModel] = useState(defaultModel);
 
   const allRoomsOptions = _.flatMap(
     schedule.venues,
@@ -97,22 +149,38 @@ const CompetitionInfo = ({
 
   return (
     <>
-      <Dropdown
-        onChange={handleChangeRoom}
-        options={allRoomsOptions}
-        value={room}
-        selection
-        className="mb-2"
-      />
-      <p>
-        You can review the schedule for that room below.
-      </p>
-      <Checkbox
-        toggle
-        label="Show only event that can be simulated"
-        checked={onlySimulated}
-        onChange={() => setOnlySimulated(!onlySimulated)}
-      />
+      <Grid
+        columns={2}
+        stackable
+      >
+        <Grid.Column>
+          <Dropdown
+            onChange={handleChangeRoom}
+            options={allRoomsOptions}
+            value={room}
+            selection
+            className="mb-2"
+          />
+          <p>
+            You can review the schedule for that room below.
+          </p>
+        </Grid.Column>
+        <Grid.Column>
+          <Checkbox
+            toggle
+            label="Show only event that can be simulated"
+            checked={onlySimulated}
+            onChange={() => setOnlySimulated(!onlySimulated)}
+          />
+        </Grid.Column>
+        <Grid.Column width={16}>
+          <SettingsInfo
+            simulator={simulator}
+            selectedModel={selectedModel}
+            setSelectedModel={setSelectedModel}
+          />
+        </Grid.Column>
+      </Grid>
       {_.map(allActivities, (v, k) => (
         <Fragment key={k}>
           <Divider horizontal>
@@ -129,6 +197,7 @@ const CompetitionInfo = ({
                 pbMap={pbMap}
                 groupsById={groupsById}
                 simulator={simulator}
+                selectedModel={selectedModel}
               />
             ))}
           </Grid>
@@ -164,12 +233,12 @@ const Competition = ({
         />
       </Header>
       {error && (
-        <LoadingError error={error} />
+      <LoadingError error={error} />
       )}
       {loading && (
-        <Segment>
-          <LoadingPlaceholder />
-        </Segment>
+      <Segment>
+        <LoadingPlaceholder />
+      </Segment>
       )}
       {!loading && data && (
         <CompetitionInfo compWcif={data} simulator={simulator} />
