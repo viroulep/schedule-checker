@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Header, Button, Icon } from 'semantic-ui-react';
+import ls from 'local-storage';
 
 import LoadingError from '../UtilsComponents/LoadingError';
 import Competition from './Competition';
@@ -11,7 +12,9 @@ const loadWcif = (event, fileInput, setWcif, setError) => {
   const reader = new FileReader();
   reader.onload = (e) => {
     try {
-      setWcif(JSON.parse(e.target.result));
+      const wcif = JSON.parse(e.target.result);
+      setWcif(wcif);
+      ls('local-wcif', wcif);
     } catch (error) {
       setError(error.message);
     }
@@ -27,7 +30,7 @@ const LocalCompetition = ({
   simulator,
 }) => {
   const [error, setError] = useState(null);
-  const [wcif, setWcif] = useState(null);
+  const [wcif, setWcif] = useState(ls('local-wcif'));
   const fileInput = useRef(null);
   return (
     <>
@@ -57,7 +60,12 @@ const LocalCompetition = ({
         <LoadingError error={error} />
       )}
       {wcif && (
-        <Competition simulator={simulator} compWcif={wcif} />
+        <>
+          <Header as="h2">
+            {wcif.name}
+          </Header>
+          <Competition simulator={simulator} compWcif={wcif} />
+        </>
       )}
     </>
   );
