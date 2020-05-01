@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   List, Header, Grid, Segment,
 } from 'semantic-ui-react';
+import _ from 'lodash';
 import { parseActivityCode } from '../wca/wcif';
 import Group from './Group';
 import EventIcon from '../UtilsComponents/EventIcon';
@@ -39,7 +40,7 @@ const Round = ({
           </Header.Content>
         </Header>
         <List relaxed>
-          {childActivities.map((ca, index) => (
+          {_.sortBy(childActivities, ['startTime']).map((ca, index) => (
             <Group
               index={index}
               key={ca.id}

@@ -18,7 +18,8 @@ import {
 } from './wca/persistence';
 import { isStaging, selfUrl } from './wca/routes';
 import CompetitionsList from './Competitions/IndexList';
-import Competition from './Competitions/Show';
+import Competition from './Competitions/RemoteCompetition';
+import CompetitionFromWcif from './Competitions/LocalCompetition';
 
 const LoadingMessage = () => (
   <>
@@ -144,6 +145,7 @@ function App() {
             <Home path="/" />
             <Settings simulator={simulator} path="settings/*" />
             <QuickRunPage simulator={simulator} path="/quick-simu" />
+            <CompetitionFromWcif simulator={simulator} path="/from-wcif" />
             {!loading && currentUser && (
               <Competitions path="competitions">
                 <CompetitionsList path="/" />

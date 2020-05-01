@@ -2,19 +2,14 @@ import React, {
   Fragment, useState, useEffect,
 } from 'react';
 import {
-  Divider, Dropdown, Form, Grid, Header, Segment, Checkbox,
+  Divider, Dropdown, Form, Grid, Header, Checkbox, Segment,
 } from 'semantic-ui-react';
 import _ from 'lodash';
 import { SettingsDescription } from '@viroulep/group-simulator';
 
-import { competitionWcifUrl } from '../wca/routes';
 import { parseActivityCode } from '../wca/wcif';
-import { usePersistence } from '../wca/persistence';
-import { defaultModel } from '../data/simu';
 import { loadStoredConfig } from '../utils';
-import SyncIcon from './SyncIcon';
-import LoadingError from '../UtilsComponents/LoadingError';
-import LoadingPlaceholder from '../UtilsComponents/LoadingPlaceholder';
+import { defaultModel } from '../data/simu';
 import ModelPicker from '../Pickers/Model';
 import Round from './Round';
 import Events from '../data/events';
@@ -100,18 +95,18 @@ const SettingsInfo = ({
           </Grid.Row>
         </Grid>
       </Form>
-      <p>
+      <div>
         I want to use the
         {' '}
         <ModelPicker model={selectedModel} setModel={setSelectedModel} inline />
         {' '}
         system.
-      </p>
+      </div>
     </Segment>
   );
 };
 
-const CompetitionInfo = ({
+const Competition = ({
   simulator,
   compWcif,
 }) => {
@@ -205,46 +200,6 @@ const CompetitionInfo = ({
       ))}
     </>
   )
-};
-
-const Competition = ({
-  competitionId,
-  simulator,
-}) => {
-  const {
-    loadedData, loading, error, sync,
-  } = usePersistence(
-    `competitions.${competitionId}`,
-    competitionWcifUrl(competitionId),
-  );
-  const { data, lastFetched } = loadedData;
-  return (
-    <>
-      <Header as="h1" className="my-comps">
-        {data ? (
-          data.name
-        ) : (
-          competitionId
-        )}
-        <SyncIcon
-          loading={loading}
-          sync={sync}
-          lastFetched={lastFetched}
-        />
-      </Header>
-      {error && (
-      <LoadingError error={error} />
-      )}
-      {loading && (
-      <Segment>
-        <LoadingPlaceholder />
-      </Segment>
-      )}
-      {!loading && data && (
-        <CompetitionInfo compWcif={data} simulator={simulator} />
-      )}
-    </>
-  );
 };
 
 export default Competition;

@@ -24,6 +24,9 @@ const Navigation = ({
     <Link to={prefixed('/quick-simu')} getProps={isPartiallyActive}>
       Quick simulation
     </Link>
+    <Link to={prefixed('/from-wcif')} getProps={isExactlyActive}>
+      Check WCIF
+    </Link>
     {user && (
       <Link to={prefixed('/competitions')} getProps={isPartiallyActive}>
         My competitions
