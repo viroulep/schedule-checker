@@ -15,6 +15,8 @@ const Round = ({
   activity,
   pbMap,
   groupsById,
+  maxStaff,
+  maxStations,
 }) => {
   const { activityCode, name, childActivities } = activity;
   const { eventId } = parseActivityCode(activityCode);
@@ -53,6 +55,8 @@ const Round = ({
               groupsById={groupsById}
               simulator={simulator}
               selectedModel={selectedModel}
+              maxStaff={maxStaff}
+              maxStations={maxStations}
             />
           ))}
         </List>

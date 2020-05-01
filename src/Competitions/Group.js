@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import {
   Button, Divider, List, Header,
 } from 'semantic-ui-react';
-import { asVector, asMap } from '@viroulep/group-simulator';
+import { asVector } from '@viroulep/group-simulator';
 import _ from 'lodash';
 
-import { parseActivityCode, getRoundData } from '../wca/wcif';
+import { parseActivityCode, getRoundData, localConfigFromActivity } from '../wca/wcif';
 import { timeToString } from '../utils';
 import GroupGenerator from '../GroupGeneration/ModalGenRandom';
+import BestConfigSection from './BestConfigurationSection';
 
 
 const competitorsToTimes = (competitors, pbMap, eventId) => {
@@ -155,30 +156,16 @@ const computeSimulatedTime = (
   times, simulator, activity, compWcif, setSimulated, setError, selectedModel,
 ) => {
   if (times.length === 0) {
-    setSimulated(undefined);
+    setSimulated(null);
     return;
   }
   const { activityCode } = activity;
   const { eventId } = parseActivityCode(activityCode);
   const timesVec = asVector(simulator.VectorTime, times);
-  // We'll just use the default config with no override!
-  const { cutoff, timeLimit } = getRoundData(compWcif.events, activityCode);
-  const configOverride = {};
-  if (timeLimit) {
-    // NOTE: cumulative time limit across events are not supported
-    // (and not planed to be).
-    const { centiseconds } = timeLimit;
-    configOverride.time_limit = Math.floor(centiseconds / 100);
-  }
-  if (cutoff) {
-    // Because we only simulate timed event, we can safely assume the attemptResult
-    // is a value representing centiseconds!
-    const { attemptResult } = cutoff;
-    configOverride.cutoff = Math.floor(attemptResult / 100);
-  }
+  const configOverride = localConfigFromActivity(simulator, compWcif, activityCode);
 
   const { Err, Value } = simulator.simuGroup(
-    eventId, timesVec, asMap(simulator.MapStringInt, configOverride), selectedModel,
+    eventId, timesVec, configOverride, selectedModel,
   );
 
   if (Err !== simulator.ErrorKind.SUCCESS) {
@@ -190,7 +177,6 @@ const computeSimulatedTime = (
   }
 };
 
-
 const Group = ({
   index,
   simulator,
@@ -201,9 +187,11 @@ const Group = ({
   accuracyArray,
   setAccuracyArray,
   compWcif,
+  maxStaff,
+  maxStations,
 }) => {
-  const [error, setError] = useState(undefined);
-  const [simulated, setSimulated] = useState(undefined);
+  const [error, setError] = useState(null);
+  const [simulated, setSimulated] = useState(null);
   const [times, setTimes] = useState([]);
   const {
     name, startTime, endTime,
@@ -264,6 +252,15 @@ const Group = ({
           <>No simulation result yet</>
         )}
       </p>
+      <BestConfigSection
+        activity={activity}
+        compWcif={compWcif}
+        maxStaff={maxStaff}
+        maxStations={maxStations}
+        times={times}
+        selectedModel={selectedModel}
+        simulator={simulator}
+      />
     </List.Item>
   );
 };

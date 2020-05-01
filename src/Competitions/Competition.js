@@ -2,7 +2,7 @@ import React, {
   Fragment, useState, useEffect,
 } from 'react';
 import {
-  Divider, Dropdown, Form, Grid, Header, Checkbox, Segment,
+  Divider, Dropdown, Form, Grid, Header, Icon, Checkbox, Segment,
 } from 'semantic-ui-react';
 import _ from 'lodash';
 import { SettingsDescription } from '@viroulep/group-simulator';
@@ -63,38 +63,50 @@ const settingsToDisplay = [
   'judges', 'scramblers', 'runners', 'extra_rate', 'miscramble_rate',
 ];
 
+/* eslint-disable jsx-a11y/label-has-associated-control */
 const SettingsInfo = ({
-  simulator,
+  setupSettings,
   selectedModel,
   setSelectedModel,
-}) => {
-  const { mapSetup } = loadStoredConfig(simulator);
-  /* eslint-disable jsx-a11y/label-has-associated-control */
-  return (
-    <Segment color="teal">
-      <Header as="h2">
-        Settings
-      </Header>
-      <p>
-        You can adjust them in the &quot;settings&quot; section,
-        except for the system used that you can select below.
-      </p>
-      <Form className="mb-2">
-        <Grid columns={3}>
-          <Grid.Row>
-            {settingsToDisplay.map((s) => (
-              <Grid.Column key={s}>
-                <Form.Field inline>
-                  <label>{SettingsDescription.setup[s].text}</label>
-                  :
-                  {' '}
-                  {mapSetup[s]}
-                </Form.Field>
-              </Grid.Column>
-            ))}
-          </Grid.Row>
-        </Grid>
-      </Form>
+  maxStaff,
+  setMaxStaff,
+}) => (
+  <Segment color="teal">
+    <Header as="h2">
+      Settings
+    </Header>
+    <p>
+      You can adjust them in the &quot;settings&quot; section,
+      except for the system used that you can select below.
+    </p>
+    <Form>
+      <Grid columns={3} className="mb-2">
+        <Grid.Row>
+          {settingsToDisplay.map((s) => (
+            <Grid.Column key={s}>
+              <Form.Field inline>
+                <label>{SettingsDescription.setup[s].text}</label>
+                :
+                {' '}
+                {setupSettings[s]}
+              </Form.Field>
+            </Grid.Column>
+          ))}
+        </Grid.Row>
+      </Grid>
+      <div>
+        <Form.Input
+          inline
+          label="Max number of staff for each group:"
+          type="number"
+          min={3}
+          size="small"
+          value={maxStaff}
+          onChange={(e) => setMaxStaff(
+            parseInt(e.target.value, 10) || 0,
+          )}
+        />
+      </div>
       <div>
         I want to use the
         {' '}
@@ -102,10 +114,17 @@ const SettingsInfo = ({
         {' '}
         system.
       </div>
-    </Segment>
-  );
-};
-
+      <p>
+        Click on
+        {' '}
+        <Icon name="calculator" />
+        {' '}
+        to compute the shortest time to run the group, and to display which
+        staff assignments were used.
+      </p>
+    </Form>
+  </Segment>
+);
 const Competition = ({
   simulator,
   compWcif,
@@ -114,7 +133,13 @@ const Competition = ({
   const [pbMap, setPbMap] = useState({});
   const [groupsById, setGroups] = useState({});
   const [onlySimulated, setOnlySimulated] = useState(true);
+
+  // Local setup stuff
+  const { mapSetup } = loadStoredConfig(simulator);
   const [selectedModel, setSelectedModel] = useState(defaultModel);
+  const [maxStaff, setMaxStaff] = useState(
+    mapSetup.judges + mapSetup.scramblers + mapSetup.runners,
+  );
 
   const allRoomsOptions = _.flatMap(
     schedule.venues,
@@ -170,9 +195,11 @@ const Competition = ({
         </Grid.Column>
         <Grid.Column width={16}>
           <SettingsInfo
-            simulator={simulator}
+            setupSettings={mapSetup}
             selectedModel={selectedModel}
             setSelectedModel={setSelectedModel}
+            maxStaff={maxStaff}
+            setMaxStaff={setMaxStaff}
           />
         </Grid.Column>
       </Grid>
@@ -193,6 +220,8 @@ const Competition = ({
                 groupsById={groupsById}
                 simulator={simulator}
                 selectedModel={selectedModel}
+                maxStaff={maxStaff}
+                maxStations={mapSetup.judges}
               />
             ))}
           </Grid>

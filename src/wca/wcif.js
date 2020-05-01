@@ -1,3 +1,4 @@
+import { asMap } from '@viroulep/group-simulator';
 import Events from '../data/events';
 
 export const parseActivityCode = (activityCode) => {
@@ -32,4 +33,23 @@ export const getRoundData = (events, activityCode) => {
   const roundId = `${eventId}-r${roundNumber}`;
   const event = events.find((e) => e.id === eventId);
   return event ? event.rounds.find((r) => r.id === roundId) : null;
+};
+
+export const localConfigFromActivity = (simulator, compWcif, activityCode) => {
+  // We'll just use the default config with no override!
+  const { cutoff, timeLimit } = getRoundData(compWcif.events, activityCode);
+  const configOverride = {};
+  if (timeLimit) {
+    // NOTE: cumulative time limit across events are not supported
+    // (and not planed to be).
+    const { centiseconds } = timeLimit;
+    configOverride.time_limit = Math.floor(centiseconds / 100);
+  }
+  if (cutoff) {
+    // Because we only simulate timed event, we can safely assume the attemptResult
+    // is a value representing centiseconds!
+    const { attemptResult } = cutoff;
+    configOverride.cutoff = Math.floor(attemptResult / 100);
+  }
+  return asMap(simulator.MapStringInt, configOverride)
 };
