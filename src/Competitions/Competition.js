@@ -211,7 +211,7 @@ const Competition = ({
             </Header>
           </Divider>
           <Grid columns={3} stackable>
-            {v.map((activity) => (
+            {_.sortBy(v, ['startTime']).map((activity) => (
               <Round
                 key={activity.id}
                 activity={activity}

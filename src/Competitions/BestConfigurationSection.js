@@ -27,7 +27,7 @@ const computeBestConfig = (
   const timesVec = asVector(simulator.VectorTime, times);
   const configOverride = localConfigFromActivity(simulator, compWcif, activityCode);
   const bestConfig = simulator.optimizeStaff(
-    eventId, timesVec, 10, maxStaff, configOverride, selectedModel,
+    eventId, timesVec, maxStations, maxStaff, configOverride, selectedModel,
   );
   if (bestConfig.Err !== simulator.ErrorKind.SUCCESS) {
     setError(
